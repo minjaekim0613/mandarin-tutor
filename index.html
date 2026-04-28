@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>學中文 · 老師</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#1a9e6e;--green-d:#0f6b4a;--green-l:#e0f5ec;--green-m:#7dd4b0;
+  --red:#c94040;--red-l:#fdeaea;
+  --ink:#1a1a18;--ink2:#555550;--ink3:#99998f;
+  --paper:#fafaf7;--paper2:#f2f2ee;--paper3:#e8e8e3;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --r:10px;--rl:16px;--rpill:999px;
+  --ff:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --ffs:Georgia,"Noto Serif TC",serif;
+  --shadow:0 2px 12px rgba(0,0,0,0.07);
+}
+body{font-family:var(--ff);background:var(--paper);color:var(--ink);min-height:100vh;}
+.app{max-width:680px;margin:0 auto;padding:1.25rem 1rem 5rem;}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.brand{font-family:var(--ffs);font-size:22px;font-weight:600;letter-spacing:-0.5px;}
+.brand em{color:var(--green);font-style:normal;}
+.badge{font-size:12px;font-weight:600;color:var(--green-d);background:var(--green-l);padding:4px 11px;border-radius:var(--rpill);}
+.tabs{display:flex;gap:4px;margin-bottom:1.1rem;flex-wrap:wrap;}
+.tab{padding:7px 15px;border-radius:var(--rpill);font-size:13px;font-weight:500;border:1px solid var(--border2);background:transparent;cursor:pointer;color:var(--ink2);font-family:var(--ff);transition:all .15s;}
+.tab.on{background:var(--green);color:#fff;border-color:var(--green);}
+.tab:hover:not(.on){background:var(--paper2);}
+.pane{display:none;animation:fi .2s ease;}
+.pane.on{display:block;}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:1.1rem 1.25rem;margin-bottom:.9rem;box-shadow:var(--shadow);}
+.card-ttl{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:.8rem;}
+.lbl{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.45rem;}
+.btn{padding:8px 18px;border-radius:var(--r);font-size:13px;font-weight:500;border:1px solid var(--border2);cursor:pointer;background:transparent;color:var(--ink);font-family:var(--ff);transition:all .15s;}
+.btn:hover{background:var(--paper2);}
+.btn.p{background:var(--green);color:#fff;border-color:var(--green);}
+.btn.p:hover{background:var(--green-d);}
+.btn.ok{border-color:var(--green);color:var(--green-d);}
+.btn.ok:hover{background:var(--green-l);}
+.btn.bad{border-color:var(--red);color:var(--red);}
+.btn.bad:hover{background:var(--red-l);}
+.btn.sm{padding:5px 10px;font-size:12px;}
+.btn.danger{color:var(--red);border-color:var(--red);}
+.btn.danger:hover{background:var(--red-l);}
+input,textarea,select{width:100%;padding:8px 11px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:var(--ff);background:var(--paper2);color:var(--ink);transition:border-color .15s;}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--green);background:#fff;}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.fgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;}
+.field label{font-size:11px;color:var(--ink2);display:block;margin-bottom:3px;}
+.fcf{display:flex;gap:4px;flex-wrap:wrap;}
+.pill{padding:4px 10px;border-radius:var(--rpill);font-size:12px;font-weight:500;border:1px solid var(--border2);cursor:pointer;background:transparent;color:var(--ink2);font-family:var(--ff);}
+.pill.on{background:var(--green);color:#fff;border-color:var(--green);}
+.pdots{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:.75rem;min-height:10px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--paper3);}
+.dot.ok{background:var(--green);}.dot.no{background:var(--red);}.dot.cur{background:var(--green);box-shadow:0 0 0 2px var(--green-m);}
+.fwrap{perspective:1000px;margin-bottom:.75rem;}
+.fcard{width:100%;min-height:220px;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer;user-select:none;}
+.fcard.flipped{transform:rotateY(180deg);}
+.face{position:absolute;width:100%;min-height:220px;backface-visibility:hidden;background:#fff;border:1px solid var(--border);border-radius:var(--rl);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;box-shadow:var(--shadow);}
+.face.back{transform:rotateY(180deg);}
+.fczh{font-family:var(--ffs);font-size:76px;line-height:1;}
+.fctag{font-size:11px;color:var(--ink3);margin-top:8px;background:var(--paper2);padding:2px 8px;border-radius:var(--rpill);}
+.fchint{font-size:12px;color:var(--ink3);margin-top:1.25rem;}
+.fcpy{font-size:19px;color:var(--green);margin-bottom:4px;font-weight:500;}
+.fcen{font-family:var(--ffs);font-size:22px;font-weight:600;}
+.fctype{font-size:11px;color:var(--ink3);margin-top:4px;}
+.fcnote{font-size:13px;color:var(--ink2);margin-top:8px;text-align:center;max-width:280px;line-height:1.5;}
+.fcbtns{display:flex;gap:8px;justify-content:center;}
+.donebox{text-align:center;padding:2.5rem 1rem;background:#fff;border:1px solid var(--border);border-radius:var(--rl);box-shadow:var(--shadow);}
+.donebox .big{font-size:42px;margin-bottom:.5rem;}
+.donebox h2{font-size:18px;font-weight:600;margin-bottom:.4rem;}
+.donebox p{font-size:14px;color:var(--ink2);margin-bottom:1.25rem;}
+.empty{text-align:center;padding:3rem 1rem;color:var(--ink2);font-size:14px;}
+.qzscore{display:flex;gap:10px;align-items:center;font-size:13px;margin-bottom:.75rem;}
+.qzq{font-family:var(--ffs);text-align:center;padding:1.5rem;background:#fff;border:1px solid var(--border);border-radius:var(--rl);margin-bottom:.75rem;min-height:110px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;box-shadow:var(--shadow);}
+.qzsub{font-size:15px;color:var(--green);font-family:var(--ff);}
+.qzopts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem;}
+.qzopt{padding:13px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;cursor:pointer;background:#fff;color:var(--ink);font-family:var(--ff);text-align:center;transition:all .15s;font-weight:500;}
+.qzopt:hover:not(:disabled){border-color:var(--green);background:var(--green-l);}
+.qzopt.correct{background:var(--green-l);border-color:var(--green);color:var(--green-d);}
+.qzopt.wrong{background:var(--red-l);border-color:var(--red);color:var(--red);}
+.qzopt:disabled{cursor:default;}
+.qzfb{text-align:center;padding:.7rem;border-radius:var(--r);font-size:14px;font-weight:500;margin-bottom:.6rem;}
+.qzfb.ok{background:var(--green-l);color:var(--green-d);}
+.qzfb.bad{background:var(--red-l);color:var(--red);}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;}
+.stat{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:.9rem;text-align:center;box-shadow:var(--shadow);}
+.stat-n{font-size:28px;font-weight:600;}
+.stat-l{font-size:11px;color:var(--ink2);margin-top:2px;}
+.lg{margin-bottom:1.1rem;}
+.wrow{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r);background:#fff;margin-bottom:4px;}
+.wzh{font-family:var(--ffs);font-size:24px;min-width:50px;}
+.winf{flex:1;}
+.wpy{font-size:12px;color:var(--green-d);font-weight:500;}
+.wen{font-size:13px;color:var(--ink2);}
+.wtype{font-size:10px;color:var(--ink3);}
+.gc{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1rem;margin-bottom:.7rem;border-left:3px solid var(--green);}
+.gc h3{font-size:14px;font-weight:600;margin-bottom:.35rem;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.gc p{font-size:13px;color:var(--ink2);line-height:1.6;}
+.gc .ex{font-size:13px;color:var(--ink);margin-top:.4rem;background:var(--paper2);padding:6px 10px;border-radius:var(--r);line-height:1.6;}
+.toast{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 18px;border-radius:var(--rpill);font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:999;white-space:nowrap;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="brand">學中文 <em>·</em> 老師</div>
+    <div class="badge">Lessons 4–10 + Bonus · 174 words</div>
+  </div>
+  <div class="tabs">
+    <button class="tab on" onclick="go('cards')">Flashcards</button>
+    <button class="tab" onclick="go('quiz')">Quiz</button>
+    <button class="tab" onclick="go('practice')">Practice</button>
+    <button class="tab" onclick="go('draw')">Draw</button>
+    <button class="tab" onclick="go('words')">My Words</button>
+    <button class="tab" onclick="go('grammar')">Grammar</button>
+    <button class="tab" onclick="go('add')">+ Add</button>
+  </div>
+
+  <!-- FLASHCARDS -->
+  <div class="pane on" id="pane-cards">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:6px;">
+      <div class="fcf" id="fcf"></div>
+      <span id="fcct" style="font-size:13px;color:var(--ink2);"></span>
+    </div>
+    <div class="pdots" id="pdots"></div>
+    <div class="fwrap" id="fwrap" style="display:none;">
+      <div class="fcard" id="fcard" onclick="flip()">
+        <div class="face front"><div class="fczh" id="fzh"></div><div class="fctag" id="ftag"></div><div class="fchint">tap to reveal</div></div>
+        <div class="face back"><div class="fcpy" id="fpy"></div><div class="fcen" id="fen"></div><div class="fctype" id="ftype"></div><div class="fcnote" id="fnote"></div></div>
+      </div>
+    </div>
+    <div class="fcbtns" id="fbtns" style="display:none;margin-bottom:.75rem;">
+      <button class="btn bad" onclick="mark(false)">Still learning</button>
+      <button class="btn ok" onclick="mark(true)">Got it! ✓</button>
+    </div>
+    <div class="donebox" id="fdone" style="display:none;">
+      <div class="big">🎉</div><h2>Session complete!</h2><p id="donesum"></p>
+      <button class="btn p" onclick="startDeck()">Go again</button>
+    </div>
+    <div class="empty" id="fempty" style="display:none;"><div style="font-size:36px;margin-bottom:.5rem;">📖</div>No words for this filter.</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="pane" id="pane-quiz">
+    <div class="card">
+      <div class="card-ttl">Multiple Choice Quiz</div>
+      <div style="display:flex;gap:6px;margin-bottom:.75rem;flex-wrap:wrap;">
+        <button class="pill on" id="qz-mode-mc" onclick="setQZMode('mc')">Character → Meaning</button>
+        <button class="pill" id="qz-mode-rev" onclick="setQZMode('rev')">Meaning → Character</button>
+        <button class="pill" id="qz-mode-mix" onclick="setQZMode('mix')">Mixed 🔀</button>
+      </div>
+      <div class="fcf" id="qzf" style="margin-bottom:.75rem;"></div>
+      <div class="qzscore">
+        <span id="qzok" style="color:var(--green);font-weight:600;">0 ✓</span>
+        <span id="qzno" style="color:var(--red);font-weight:600;">0 ✗</span>
+        <span id="qzprog" style="color:var(--ink3);"></span>
+        <button class="btn sm" id="qz-back" onclick="goBackQuiz()" style="display:none;">← Back</button>
+        <button class="btn sm" id="qz-restart" onclick="restartQuiz()" style="display:none;margin-left:auto;">↺ Restart</button>
+      </div>
+    </div>
+    <div id="qzqwrap">
+      <div class="qzq" id="qzq">Press start to begin!</div>
+      <div class="qzfb" id="qzfb" style="display:none;border-radius:0 0 var(--rl) var(--rl);margin-top:0;"></div>
+    </div>
+    <div class="qzopts" id="qzopts" style="margin-top:.75rem;"></div>
+    <div style="text-align:center;display:flex;gap:8px;justify-content:center;">
+      <button class="btn p" id="qzbtn" onclick="startQuiz()">Start Quiz ▶</button>
+      <button class="btn p" id="qznext" onclick="nextQuiz()" style="display:none;">Next →</button>
+    </div>
+  </div>
+
+  <!-- PRACTICE -->
+  <div class="pane" id="pane-practice">
+    <div class="card">
+      <div class="card-ttl">Practice Mode</div>
+      <div style="font-size:13px;color:var(--ink2);margin-bottom:.75rem;">5 question types rotate randomly — character to meaning, English to Chinese, fill in the blank, best reply, and find the error.</div>
+      <div class="fcf" id="prf" style="margin-bottom:.75rem;"></div>
+      <div class="qzscore">
+        <span id="prok" style="color:var(--green);font-weight:600;">0 ✓</span>
+        <span id="prno" style="color:var(--red);font-weight:600;">0 ✗</span>
+        <span id="prprog" style="color:var(--ink3);"></span>
+        <span id="prbadge" style="font-size:11px;font-weight:600;color:var(--green-d);background:var(--green-l);padding:2px 8px;border-radius:var(--rpill);"></span>
+        <button class="btn sm" id="pr-back" onclick="goBackPractice()" style="display:none;">← Back</button>
+        <button class="btn sm" id="pr-restart" onclick="restartPractice()" style="display:none;margin-left:auto;">↺ Restart</button>
+      </div>
+    </div>
+    <div id="prqwrap">
+      <div id="prqbox"></div>
+      <div class="qzfb" id="prfb" style="display:none;border-radius:0 0 var(--rl) var(--rl);margin-top:0;"></div>
+    </div>
+    <div id="probox"></div>
+    <div style="text-align:center;margin-top:.5rem;display:flex;gap:8px;justify-content:center;">
+      <button class="btn p" id="prbtn" onclick="startPractice()">Start Practice ▶</button>
+      <button class="btn p" id="prnext" onclick="nextPractice()" style="display:none;">Next →</button>
+    </div>
+  </div>
+
+  <!-- DRAW -->
+  <div class="pane" id="pane-draw">
+    <div class="card">
+      <div class="card-ttl">Character Drawing Practice</div>
+      <div style="font-size:13px;color:var(--ink2);margin-bottom:.75rem;">Draw the character shown in pinyin and English. Use your finger on the canvas, then reveal to compare and self-grade.</div>
+      <div class="fcf" id="dr-filters" style="margin-bottom:.75rem;"></div>
+      <div class="qzscore">
+        <span id="drok" style="color:var(--green);font-weight:600;">0 ✓</span>
+        <span id="drno" style="color:var(--red);font-weight:600;">0 ✗</span>
+        <span id="drprog" style="color:var(--ink3);"></span>
+        <button class="btn sm" id="dr-back" onclick="goBackDraw()" style="display:none;">← Back</button>
+        <button class="btn sm" id="dr-restart" onclick="restartDraw()" style="display:none;margin-left:auto;">↺ Restart</button>
+      </div>
+    </div>
+    <div id="dr-card" style="display:none;">
+      <div class="card" style="border-left:3px solid var(--green);text-align:center;padding:1.5rem;">
+        <div style="font-size:13px;color:var(--ink3);margin-bottom:.25rem;" id="dr-lesson-tag"></div>
+        <div style="font-size:28px;font-weight:600;color:var(--green-d);margin-bottom:4px;" id="dr-py"></div>
+        <div style="font-size:16px;color:var(--ink2);" id="dr-en"></div>
+      </div>
+      <div class="card" style="padding:.75rem;">
+        <div class="lbl" style="margin-bottom:.5rem;">Draw the character here</div>
+        <canvas id="dr-canvas" style="width:100%;height:220px;border:1.5px solid var(--border2);border-radius:var(--r);background:#fff;touch-action:none;cursor:crosshair;display:block;"></canvas>
+        <div style="display:flex;gap:8px;margin-top:.75rem;flex-wrap:wrap;">
+          <button class="btn" onclick="clearCanvas()">Clear ✕</button>
+          <button class="btn p" onclick="revealChar()">Reveal character ▶</button>
+        </div>
+      </div>
+      <div id="dr-reveal" style="display:none;">
+        <div class="card" style="text-align:center;padding:1.5rem;">
+          <div class="lbl" style="margin-bottom:.5rem;">Correct character</div>
+          <div style="font-size:100px;line-height:1;font-family:Georgia,serif;" id="dr-reveal-char"></div>
+          <div style="font-size:15px;color:var(--green-d);margin-top:8px;" id="dr-reveal-py"></div>
+          <div style="font-size:13px;color:var(--ink2);margin-top:4px;" id="dr-reveal-en"></div>
+        </div>
+        <div style="text-align:center;margin-bottom:1rem;">
+          <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:.75rem;">How did you do?</div>
+          <div style="display:flex;gap:8px;justify-content:center;">
+            <button class="btn bad" onclick="drMark(false)">Not quite</button>
+            <button class="btn ok" onclick="drMark(true)">Got it! ✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="donebox" id="dr-done" style="display:none;">
+      <div class="big">🎉</div><h2>Session complete!</h2><p id="dr-done-sum"></p>
+      <button class="btn p" onclick="startDraw()">Go again</button>
+    </div>
+    <div style="text-align:center;" id="dr-start-wrap">
+      <button class="btn p" onclick="startDraw()">Start Drawing ▶</button>
+    </div>
+  </div>
+
+  <!-- MY WORDS -->
+  <div class="pane" id="pane-words">
+    <div class="stats">
+      <div class="stat"><div class="stat-n" id="sttotal">0</div><div class="stat-l">total words</div></div>
+      <div class="stat"><div class="stat-n" id="stlessons">0</div><div class="stat-l">lessons loaded</div></div>
+    </div>
+    <div class="fcf" id="wf" style="margin-bottom:.75rem;"></div>
+    <div style="margin-bottom:.9rem;">
+      <input id="wsearch" placeholder="Search by character, pinyin, or meaning…" oninput="filterWords()" style="font-size:15px;"/>
+    </div>
+    <div id="wlist"></div>
+  </div>
+
+  <!-- GRAMMAR -->
+  <div class="pane" id="pane-grammar">
+    <div id="glist"></div>
+    <div class="card">
+      <div class="card-ttl">Add a grammar note from class</div>
+      <div style="margin-bottom:6px;"><input id="gttl" placeholder="Pattern title e.g. 是...的 structure"/></div>
+      <div style="margin-bottom:6px;"><textarea id="gbody" rows="3" placeholder="Explanation…" style="resize:vertical;"></textarea></div>
+      <div style="margin-bottom:8px;"><input id="gex" placeholder="Example sentence (optional)"/></div>
+      <button class="btn p" onclick="addGrammar()">Save note</button>
+    </div>
+  </div>
+
+  <!-- ADD VOCAB -->
+  <div class="pane" id="pane-add">
+    <div class="card">
+      <div class="card-ttl">Add words from your textbook</div>
+      <div class="row">
+        <select id="sellesson" style="flex:1;">
+          <option value="L1">Lesson 1</option><option value="L2">Lesson 2</option><option value="L3">Lesson 3</option>
+          <option value="L4">Lesson 4</option><option value="L5">Lesson 5</option><option value="L6">Lesson 6</option>
+          <option value="L7" selected>Lesson 7</option><option value="L8">Lesson 8</option><option value="L9">Lesson 9</option>
+          <option value="L10">Lesson 10</option><option value="L11">Lesson 11</option><option value="L12">Lesson 12</option>
+        </select>
+        <select id="seltype" style="width:150px;">
+          <option value="N">N – Noun</option><option value="V">V – Verb</option><option value="Vs">Vs – Stative V</option>
+          <option value="Adv">Adv – Adverb</option><option value="Conj">Conj</option><option value="Num">Num</option>
+          <option value="Det">Det</option><option value="Prep">Prep</option><option value="Ptc">Ptc</option>
+          <option value="Vaux">Vaux</option><option value="M">M</option><option value="">—</option>
+        </select>
+      </div>
+      <div class="fgrid">
+        <div class="field"><label>Traditional character</label><input id="inzh" placeholder="請問" style="font-size:20px;"/></div>
+        <div class="field"><label>Pinyin</label><input id="inpy" placeholder="qǐng wèn"/></div>
+        <div class="field"><label>English</label><input id="inen" placeholder="may I ask"/></div>
+      </div>
+      <div style="margin-bottom:8px;"><label style="font-size:11px;color:var(--ink2);display:block;margin-bottom:3px;">Example sentence (optional)</label>
+        <input id="innote" placeholder="請問您是哪位？"/></div>
+      <div style="display:flex;gap:7px;">
+        <button class="btn p" onclick="addWord()">Add ＋</button>
+        <button class="btn" onclick="toggleBulk()">Paste a list…</button>
+      </div>
+    </div>
+    <div class="card" id="bulkcard" style="display:none;">
+      <div class="card-ttl">Paste list — one per line: <code style="font-size:11px;">漢字 | pīnyīn | english | type</code></div>
+      <textarea id="bulkin" rows="7" placeholder="手機 | shǒujī | cell phone | N" style="width:100%;resize:vertical;margin-bottom:8px;"></textarea>
+      <div style="display:flex;gap:7px;">
+        <button class="btn p" onclick="parseBulk()">Import all</button>
+        <button class="btn" onclick="toggleBulk()">Cancel</button>
+      </div>
+    </div>
+    <div id="recentadds"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var VOCAB=[
+  {zh:"爸爸",py:"bàba",en:"father, dad",type:"N",lesson:"L4",note:""},
+  {zh:"媽媽",py:"māma",en:"mother, mom",type:"N",lesson:"L4",note:""},
+  {zh:"老師",py:"lǎoshī",en:"teacher",type:"N",lesson:"L4",note:""},
+  {zh:"忙",py:"máng",en:"busy",type:"Vs",lesson:"L4",note:""},
+  {zh:"很",py:"hěn",en:"very",type:"Adv",lesson:"L4",note:""},
+  {zh:"每天",py:"měitiān",en:"every day",type:"N",lesson:"L4",note:""},
+  {zh:"累",py:"lèi",en:"tired, tiring",type:"Vs",lesson:"L4",note:""},
+  {zh:"喜歡",py:"xǐhuān",en:"to like",type:"V",lesson:"L4",note:""},
+  {zh:"小孩子",py:"xiǎo háizi",en:"children, kids",type:"N",lesson:"L4",note:""},
+  {zh:"說",py:"shuō",en:"to say",type:"V",lesson:"L4",note:""},
+  {zh:"教",py:"jiāo",en:"to teach",type:"V",lesson:"L4",note:""},
+  {zh:"法文",py:"Fǎwén",en:"French language",type:"N",lesson:"L4",note:""},
+  {zh:"教書",py:"jiāo shū",en:"the job of teaching",type:"V",lesson:"L4",note:"phrase"},
+  {zh:"李",py:"Lǐ",en:"Li (a surname)",type:"N",lesson:"L4",note:""},
+  {zh:"今天",py:"jīntiān",en:"today",type:"N",lesson:"L4",note:""},
+  {zh:"這",py:"zhè",en:"this",type:"Det",lesson:"L5",note:""},
+  {zh:"朋友",py:"péngyǒu",en:"friend",type:"N",lesson:"L5",note:""},
+  {zh:"認識",py:"rènshì",en:"to know, meet, recognize",type:"V",lesson:"L5",note:""},
+  {zh:"高興",py:"gāoxìng",en:"happy, glad",type:"Vs",lesson:"L5",note:""},
+  {zh:"平常",py:"píngcháng",en:"usually, normally",type:"Adv",lesson:"L5",note:""},
+  {zh:"住在",py:"zhù zài",en:"to live in / at",type:"V",lesson:"L5",note:""},
+  {zh:"現在",py:"xiànzài",en:"now",type:"N",lesson:"L5",note:""},
+  {zh:"學校",py:"xuéxiào",en:"school",type:"N",lesson:"L5",note:""},
+  {zh:"放假",py:"fàngjià",en:"to be on school break / vacation",type:"V",lesson:"L5",note:""},
+  {zh:"來",py:"lái",en:"to come",type:"V",lesson:"L5",note:""},
+  {zh:"玩",py:"wán",en:"to have fun, to play",type:"V",lesson:"L5",note:""},
+  {zh:"歡迎",py:"huānyíng",en:"to welcome",type:"V",lesson:"L5",note:""},
+  {zh:"想",py:"xiǎng",en:"would like, to want",type:"Vaux",lesson:"L5",note:""},
+  {zh:"去",py:"qù",en:"to go",type:"V",lesson:"L5",note:""},
+  {zh:"國家",py:"guójiā",en:"nation, country",type:"N",lesson:"L5",note:""},
+  {zh:"公園",py:"gōngyuán",en:"park",type:"N",lesson:"L5",note:""},
+  {zh:"好久不見",py:"hǎojiǔ bùjiàn",en:"long time no see",type:"",lesson:"L5",note:"phrase"},
+  {zh:"迪士尼樂園",py:"Díshìní lèyuán",en:"Disneyland",type:"",lesson:"L5",note:"proper noun"},
+  {zh:"臺北",py:"Táiběi",en:"Taipei",type:"N",lesson:"L5",note:""},
+  {zh:"加州",py:"Jiāzhōu",en:"California",type:"N",lesson:"L5",note:""},
+  {zh:"誰",py:"shéi",en:"who, whom",type:"",lesson:"L5",note:""},
+  {zh:"父母",py:"fùmǔ",en:"parents (formal)",type:"N",lesson:"L5",note:""},
+  {zh:"運動",py:"yùndòng",en:"to exercise",type:"V",lesson:"L6",note:""},
+  {zh:"做",py:"zuò",en:"to do",type:"V",lesson:"L6",note:""},
+  {zh:"週末",py:"zhōumò",en:"weekend",type:"N",lesson:"L6",note:""},
+  {zh:"打",py:"dǎ",en:"to play (ball)",type:"V",lesson:"L6",note:""},
+  {zh:"網球",py:"wǎngqiú",en:"tennis",type:"N",lesson:"L6",note:""},
+  {zh:"聽",py:"tīng",en:"to listen",type:"V",lesson:"L6",note:""},
+  {zh:"音樂",py:"yīnyuè",en:"music",type:"N",lesson:"L6",note:""},
+  {zh:"和",py:"hàn / hé",en:"and",type:"Conj",lesson:"L6",note:"hàn = Taiwan spoken; hé = formal"},
+  {zh:"可是",py:"kěshì",en:"but, however",type:"Conj",lesson:"L6",note:""},
+  {zh:"還",py:"hái",en:"also, in addition, as well",type:"Adv",lesson:"L6",note:""},
+  {zh:"看",py:"kàn",en:"to see, look, watch, read",type:"V",lesson:"L6",note:""},
+  {zh:"電視",py:"diànshì",en:"television",type:"N",lesson:"L6",note:""},
+  {zh:"晚上",py:"wǎnshàng",en:"night, at night",type:"N",lesson:"L6",note:""},
+  {zh:"常常",py:"chángcháng",en:"often",type:"Adv",lesson:"L6",note:""},
+  {zh:"家",py:"jiā",en:"house, home, family",type:"N",lesson:"L6",note:""},
+  {zh:"哪",py:"nǎ",en:"which, who",type:"QPr",lesson:"L7",note:""},
+  {zh:"位",py:"wèi",en:"polite measure word for people",type:"M",lesson:"L7",note:""},
+  {zh:"喂",py:"wéi",en:"Hello! (over the phone)",type:"Ptc",lesson:"L7",note:"Only used on phone"},
+  {zh:"林",py:"Lín",en:"Lin (a surname)",type:"N",lesson:"L7",note:""},
+  {zh:"小姐",py:"xiǎojiě",en:"Ms., Miss",type:"N",lesson:"L7",note:""},
+  {zh:"辦公室",py:"bàngōngshì",en:"office",type:"N",lesson:"L7",note:""},
+  {zh:"回來",py:"huílái",en:"to return, get back",type:"V",lesson:"L7",note:""},
+  {zh:"下午",py:"xiàwǔ",en:"afternoon",type:"N",lesson:"L7",note:""},
+  {zh:"麻煩",py:"máfán",en:"please / can I trouble you",type:"V",lesson:"L7",note:"Very polite request"},
+  {zh:"以後",py:"yǐhòu",en:"after",type:"N",lesson:"L7",note:""},
+  {zh:"給",py:"gěi",en:"to (preposition)",type:"Prep",lesson:"L7",note:""},
+  {zh:"電話",py:"diànhuà",en:"telephone",type:"N",lesson:"L7",note:""},
+  {zh:"手機",py:"shǒujī",en:"cell phone",type:"N",lesson:"L7",note:""},
+  {zh:"號碼",py:"hàomǎ",en:"number",type:"N",lesson:"L7",note:""},
+  {zh:"謝謝",py:"xièxie",en:"to thank, thanks",type:"V",lesson:"L7",note:""},
+  {zh:"再見",py:"zàijiàn",en:"goodbye, see you again",type:"V",lesson:"L7",note:""},
+  {zh:"零",py:"líng",en:"0, zero",type:"Num",lesson:"L7",note:""},
+  {zh:"二",py:"èr",en:"2, two",type:"Num",lesson:"L7",note:""},
+  {zh:"三",py:"sān",en:"3, three",type:"Num",lesson:"L7",note:""},
+  {zh:"四",py:"sì",en:"4, four",type:"Num",lesson:"L7",note:""},
+  {zh:"五",py:"wǔ",en:"5, five",type:"Num",lesson:"L7",note:""},
+  {zh:"六",py:"liù",en:"6, six",type:"Num",lesson:"L7",note:""},
+  {zh:"七",py:"qī",en:"7, seven",type:"Num",lesson:"L7",note:""},
+  {zh:"八",py:"bā",en:"8, eight",type:"Num",lesson:"L7",note:""},
+  {zh:"九",py:"jiǔ",en:"9, nine",type:"Num",lesson:"L7",note:""},
+  {zh:"什麼時候",py:"shénme shíhòu",en:"when",type:"",lesson:"L7",note:"phrase"},
+  {zh:"打電話",py:"dǎ diànhuà",en:"to make a phone call",type:"",lesson:"L7",note:"phrase"},
+  {zh:"幾號",py:"jǐ hào",en:"What is the phone number?",type:"",lesson:"L7",note:"phrase"},
+  {zh:"好的",py:"hǎode",en:"yes, okay",type:"",lesson:"L7",note:"phrase"},
+  {zh:"不客氣",py:"bú kèqi",en:"You are welcome",type:"",lesson:"L7",note:"phrase"},
+  {zh:"十",py:"shí",en:"10, ten",type:"Num",lesson:"L7",note:""},
+  {zh:"百",py:"bǎi",en:"100, hundred",type:"Num",lesson:"L7",note:""},
+  {zh:"台一銀行",py:"Táiyī Yínháng",en:"Taiyi Bank",type:"",lesson:"L7",note:"proper noun"},
+  {zh:"林美美",py:"Lín Měiměi",en:"Lin Meimei (a name)",type:"",lesson:"L7",note:"proper noun"},
+  {zh:"北電公司",py:"Běidiàn Gōngsī",en:"Beidian Company",type:"",lesson:"L7",note:"proper noun"},
+  {zh:"祝",py:"zhù",en:"to wish",type:"V",lesson:"L8",note:""},
+  {zh:"生日",py:"shēngrì",en:"birthday",type:"N",lesson:"L8",note:""},
+  {zh:"快樂",py:"kuàilè",en:"happy",type:"Vs",lesson:"L8",note:""},
+  {zh:"大哥",py:"dàgē",en:"oldest brother",type:"N",lesson:"L8",note:""},
+  {zh:"明天",py:"míngtiān",en:"tomorrow",type:"N",lesson:"L8",note:""},
+  {zh:"月",py:"yuè",en:"month",type:"N",lesson:"L8",note:""},
+  {zh:"號",py:"hào",en:"days of the month",type:"N",lesson:"L8",note:"colloquial spoken form"},
+  {zh:"噢",py:"òu",en:"Oh",type:"Ptc",lesson:"L8",note:"exclamation particle"},
+  {zh:"歲",py:"suì",en:"year of age",type:"N",lesson:"L8",note:"can be dropped for ages over 10"},
+  {zh:"要",py:"yào",en:"to want, to need",type:"V",lesson:"L8",note:""},
+  {zh:"禮物",py:"lǐwù",en:"gift, present",type:"N",lesson:"L8",note:""},
+  {zh:"雙",py:"shuāng",en:"measure word for a pair",type:"M",lesson:"L8",note:"e.g. 一雙鞋 = a pair of shoes"},
+  {zh:"運動鞋",py:"yùndòng xié",en:"sports shoes, sneakers",type:"N",lesson:"L8",note:""},
+  {zh:"買",py:"mǎi",en:"to buy",type:"V",lesson:"L8",note:""},
+  {zh:"請",py:"qǐng",en:"to treat / please (polite request)",type:"V",lesson:"L8",note:""},
+  {zh:"吃",py:"chī",en:"to eat",type:"V",lesson:"L8",note:""},
+  {zh:"大餐",py:"dàcān",en:"a fancy meal",type:"N",lesson:"L8",note:""},
+  {zh:"是啊",py:"shì a",en:"That's right",type:"",lesson:"L8",note:"phrase"},
+  {zh:"可以嗎",py:"kěyǐ ma",en:"Could I? Is it okay?",type:"",lesson:"L8",note:"phrase"},
+  {zh:"好不好",py:"hǎo bù hǎo",en:"Is it okay? How does that sound?",type:"",lesson:"L8",note:"tag question"},
+  {zh:"沒問題",py:"méi wèntí",en:"No problem",type:"",lesson:"L8",note:"phrase"},
+  {zh:"今年",py:"jīnnián",en:"this year",type:"N",lesson:"L8",note:""},
+  {zh:"送",py:"sòng",en:"to give a gift to someone",type:"V",lesson:"L8",note:""},
+  {zh:"日",py:"rì",en:"days of the month (written)",type:"N",lesson:"L8",note:"written/formal form of 號"},
+  // L9
+  {zh:"星期五",py:"xīngqíwǔ",en:"Friday",type:"N",lesson:"L9",note:""},
+  {zh:"時間",py:"shíjiān",en:"time",type:"N",lesson:"L9",note:""},
+  {zh:"同事",py:"tóngshì",en:"coworker, colleague",type:"N",lesson:"L9",note:""},
+  {zh:"要",py:"yào",en:"to want to",type:"Vaux",lesson:"L9",note:"auxiliary verb"},
+  {zh:"餐廳",py:"cāntīng",en:"restaurant",type:"N",lesson:"L9",note:""},
+  {zh:"跟",py:"gēn",en:"with",type:"Prep",lesson:"L9",note:""},
+  {zh:"一起",py:"yīqǐ",en:"together",type:"Adv",lesson:"L9",note:""},
+  {zh:"星期六",py:"xīngqíliù",en:"Saturday",type:"N",lesson:"L9",note:""},
+  {zh:"行",py:"xíng",en:"okay, all right",type:"V",lesson:"L9",note:""},
+  {zh:"下課",py:"xiàkè",en:"to finish class",type:"V",lesson:"L9",note:""},
+  {zh:"點",py:"diǎn",en:"o'clock",type:"N",lesson:"L9",note:""},
+  {zh:"半",py:"bàn",en:"half",type:"N",lesson:"L9",note:"e.g. 六點半 = 6:30"},
+  {zh:"見",py:"jiàn",en:"to see, to meet",type:"V",lesson:"L9",note:""},
+  {zh:"那",py:"nà",en:"that",type:"Det",lesson:"L9",note:""},
+  {zh:"家",py:"jiā",en:"measure word for restaurant, shop",type:"M",lesson:"L9",note:""},
+  {zh:"牛肉麵",py:"niúròumiàn",en:"beef noodle soup",type:"N",lesson:"L9",note:"Taiwan's national dish!"},
+  {zh:"最",py:"zuì",en:"most (superlative)",type:"Adv",lesson:"L9",note:""},
+  {zh:"好吃",py:"hǎochī",en:"delicious",type:"Vs",lesson:"L9",note:""},
+  {zh:"吃飯",py:"chī fàn",en:"to eat, to have a meal",type:"V",lesson:"L9",note:"phrase"},
+  {zh:"不行",py:"bù xíng",en:"not okay, no good",type:"",lesson:"L9",note:"phrase"},
+  {zh:"怎麼樣",py:"zěnmeyàng",en:"how about it? what do you think?",type:"",lesson:"L9",note:"phrase"},
+  {zh:"太好了",py:"tài hǎo le",en:"Excellent! Great!",type:"",lesson:"L9",note:"phrase"},
+  {zh:"美味餐廳",py:"Měiwèi Cāntīng",en:"Tasty Café (restaurant name)",type:"",lesson:"L9",note:"proper noun"},
+  {zh:"年",py:"nián",en:"year",type:"N",lesson:"L9",note:"supplementary"},
+  {zh:"晚飯",py:"wǎn fàn",en:"dinner",type:"N",lesson:"L9",note:"supplementary"},
+  // L10
+  {zh:"學",py:"xué",en:"to learn, to study",type:"V",lesson:"L10",note:""},
+  {zh:"中文",py:"Zhōngwén",en:"Mandarin, Chinese",type:"N",lesson:"L10",note:""},
+  {zh:"難",py:"nán",en:"hard, difficult",type:"Vs",lesson:"L10",note:""},
+  {zh:"休息",py:"xiūxí",en:"to take a break",type:"V",lesson:"L10",note:""},
+  {zh:"喝",py:"hē",en:"to drink",type:"V",lesson:"L10",note:""},
+  {zh:"杯",py:"bēi",en:"cup, glass (measure word for drinks)",type:"M",lesson:"L10",note:""},
+  {zh:"咖啡",py:"kāfēi",en:"coffee",type:"N",lesson:"L10",note:""},
+  {zh:"吧",py:"ba",en:"particle for suggestion",type:"Ptc",lesson:"L10",note:""},
+  {zh:"得",py:"de",en:"complement marker",type:"Ptc",lesson:"L10",note:"placed after verb before complement"},
+  {zh:"覺得",py:"juéde",en:"to think, to feel",type:"V",lesson:"L10",note:""},
+  {zh:"自己",py:"zìjǐ",en:"self, oneself",type:"N",lesson:"L10",note:""},
+  {zh:"不錯",py:"búcuò",en:"not bad, pretty good",type:"Vs",lesson:"L10",note:""},
+  {zh:"會",py:"huì",en:"can, know how to",type:"Vaux",lesson:"L10",note:"skill acquired through learning"},
+  {zh:"多少",py:"duōshǎo",en:"how much, how many",type:"QPr",lesson:"L10",note:""},
+  {zh:"差不多",py:"chābùduō",en:"approximately, about",type:"Adv",lesson:"L10",note:""},
+  {zh:"字",py:"zì",en:"Chinese character",type:"N",lesson:"L10",note:""},
+  {zh:"練習",py:"liànxí",en:"to practice",type:"V",lesson:"L10",note:""},
+  {zh:"說話",py:"shuō huà",en:"to talk, to speak",type:"V",lesson:"L10",note:"phrase"},
+  {zh:"寫字",py:"xiě zì",en:"to write characters",type:"V",lesson:"L10",note:"phrase"},
+  {zh:"有一點",py:"yǒu yīdiǎn",en:"a little, somewhat",type:"",lesson:"L10",note:"used with negative-meaning state verbs"},
+  {zh:"聊天",py:"liáo tiān",en:"to chat",type:"V",lesson:"L10",note:"phrase"},
+  {zh:"做飯",py:"zuò fàn",en:"to cook",type:"V",lesson:"L10",note:"supplementary"},
+  {zh:"快",py:"kuài",en:"fast, quick",type:"Vs",lesson:"L10",note:"supplementary"},
+  {zh:"貴",py:"guì",en:"expensive",type:"Vs",lesson:"L10",note:"supplementary"},
+  // Bonus
+  {zh:"好主意",py:"hǎo zhǔyì",en:"good idea",type:"",lesson:"Bonus",note:"very common in conversation"},
+  {zh:"知道",py:"zhīdào",en:"to know (a fact)",type:"V",lesson:"Bonus",note:"我知道 = I know, 我不知道 = I don't know"},
+  {zh:"對了",py:"duì le",en:"by the way / oh right",type:"",lesson:"Bonus",note:"used to bring up a new topic"},
+  {zh:"打算",py:"dǎsuàn",en:"to plan to, to intend",type:"V",lesson:"Bonus",note:"我打算＿＿ = I plan to..."},
+  {zh:"隨時",py:"suíshí",en:"anytime, whenever",type:"Adv",lesson:"Bonus",note:"隨時給我打電話 = call me anytime"},
+  {zh:"顧問",py:"gùwèn",en:"consultant",type:"N",lesson:"Bonus",note:"我是顧問 = I am a consultant"},
+  {zh:"當然",py:"dāngrán",en:"of course, naturally",type:"Adv",lesson:"Bonus",note:"當然可以 = of course you can"},
+  {zh:"不好意思",py:"bù hǎoyìsi",en:"sorry / excuse me",type:"",lesson:"Bonus",note:"softer than 對不起, very common in Taiwan"},
+  {zh:"留言",py:"liú yán",en:"to leave a message",type:"V",lesson:"Bonus",note:"麻煩您，可以留言嗎？"},
+  {zh:"一下",py:"yīxià",en:"briefly / just (softener)",type:"",lesson:"Bonus",note:"等一下 = wait a moment, 看一下 = take a look"},
+  {zh:"下個月",py:"xià ge yuè",en:"next month",type:"N",lesson:"Bonus",note:"下個月 not 下月 in spoken Mandarin"},
+  
+  {zh:"一家",py:"yī jiā",en:"measure word for restaurant or shop",type:"M",lesson:"Bonus",note:"一家餐廳 = one restaurant"},
+  {zh:"附近",py:"fùjìn",en:"nearby, in the vicinity",type:"N",lesson:"Bonus",note:"在辦公室附近 = near the office"},
+  {zh:"期待",py:"qīdài",en:"to look forward to, to anticipate",type:"V",lesson:"Bonus",note:"我很期待！= I'm really looking forward to it!"},
+];
+
+var GRAMMAR=[
+  {id:1,title:"這是 + Person + 名字 (Introductions)",body:"Use to introduce someone: 這是 + relationship + name. The person being introduced follows with 你好.",example:"這是我弟弟王家文。Zhè shì wǒ dìdi Wáng Jiāwén. — This is my younger brother Wang Jiawen."},
+  {id:2,title:"Negation with 不 bù / bú",body:"Place 不 before a verb or stative verb to negate. Tone changes to bú before 4th tone (e.g. 不是 búshì).",example:"他的工作不忙。Tā de gōngzuò bù máng. — His work is not busy."},
+  {id:3,title:"Yes/No questions with 嗎 ma",body:"Add 嗎 to any statement to make a yes/no question. No word order change needed.",example:"你喜歡運動嗎？Nǐ xǐhuān yùndòng ma? — Do you like to exercise?"},
+  {id:4,title:"Numbers 0–100",body:"11–19: 十 + digit (十一 = 11). 20–99: tens digit + 十 + ones (二十一 = 21). 100 = 一百 yībǎi.",example:"我的手機號碼是五一七三六零四二五九。"},
+  {id:5,title:"請問 qǐng wèn — polite opener",body:"Literally 'please may I ask.' Use at the start of any question for politeness. Essential for phone calls.",example:"請問您是哪位？Qǐng wèn nín shì nǎ wèi? — May I ask who is calling?"},
+  {id:6,title:"Dates — 幾月幾號 jǐ yuè jǐ hào (L8)",body:"To say a date: month number + 月 + day number + 號 (spoken) or 日 (written). To ask: 今天是幾月幾號？",example:"明文的生日是八月十一號。Míngwén de shēngrì shì bāyuè shíyī hào."},
+  {id:7,title:"Asking age — 你幾歲？(L8)",body:"Ask age with 你幾歲？(informal) or 你今年幾歲？(this year). Answer: 我十七歲。For ages over 10, 歲 can be dropped in casual speech.",example:"祝你生日快樂！你今年幾歲？Zhù nǐ shēngrì kuàilè! Nǐ jīnnián jǐ suì?"},
+  {id:8,title:"Tag questions — 好不好 / 可以嗎 (L8)",body:"Attach to end of a statement to make a suggestion or ask permission. 好不好 = How does that sound? 可以嗎 = May I?",example:"我請你去吃大餐，好不好？Wǒ qǐng nǐ qù chī dàcān, hǎo bù hǎo?"},
+  {id:9,title:"Days of the week — 星期 xīngqí + number (L9)",body:"星期一 = Monday (1st day), 星期二 = Tuesday... 星期六 = Saturday. Sunday is 星期天 (not 星期七). Ask: 今天星期幾？= What day is today? 禮拜 lǐbài is an alternative to 星期, equally common in Taiwan.",example:"今天星期幾？Jīntiān xīngqí jǐ? — 今天星期三。Jīntiān xīngqísān. — Today is Wednesday."},
+  {id:10,title:"Word order for dates — large to small (L9)",body:"Mandarin dates go from largest to smallest unit: Year + Month + Day + Day of week + Time. Example: 二〇二一年九月十八號星期六晚上 = Saturday evening, September 18th, 2021.",example:"二〇二六年四月七號星期一 = Monday, April 7th, 2026."},
+  {id:11,title:"Telling time — 點 diǎn / 分 fēn / 半 bàn (L9)",body:"Hours: number + 點 (e.g. 三點 = 3:00). Minutes: number + 分 (e.g. 二十分 = 20 min). Half hour: 半 (e.g. 六點半 = 6:30). Ask: 現在幾點？= What time is it now?",example:"現在十點二十分。Xiànzài shí diǎn èrshí fēn. — It is 10:20."},
+  {id:12,title:"跟 gēn + someone + 一起 yīqǐ + V (L9)",body:"跟 (with) appears before the person, 一起 (together) comes before the verb. Pattern: 我跟＿＿一起＿＿ = I [verb] together with [person].",example:"我週末跟我父母一起吃晚飯。Wǒ zhōumò gēn wǒ fùmǔ yīqǐ chī wǎnfàn. — I have dinner with my parents on weekends."},,
+  {id:13,title:"得 de + Descriptive Complement (L10)",body:"得 follows the verb and introduces a complement describing how well the action is done. Pattern: S + V + O, V + 得 + (Adv) + Vs.",example:"他說中文說得很好。Tā shuō Zhōngwén shuō de hěn hǎo. — He speaks Mandarin very well."},
+  {id:14,title:"有一點 yǒu yīdiǎn (L10)",body:"有一點 is used before state verbs with a negative/dissatisfied meaning. Cannot use with positive verbs like 好吃. 一 is often dropped in speech.",example:"說中文有一點難。Shuō Zhōngwén yǒu yīdiǎn nán. — Speaking Mandarin is a little hard."},
+  {id:15,title:"會 huì — can / know how to (L10)",body:"會 is an auxiliary verb for skills acquired through learning. Place before the main verb. Negate with 不會.",example:"我會說中文。Wǒ huì shuō Zhōngwén. 我不會打網球。Wǒ bù huì dǎ wǎngqiú."},
+  {id:16,title:"多少 vs 幾 — how many (L10)",body:"多少 asks any quantity (no measure word needed). 幾 is for quantities under 10 and needs a measure word after it.",example:"你會寫多少字？— How many characters? 你有幾個孩子？— How many children?"}
+];
+var DIALOGUES=[
+  {q:"你爸爸的工作忙不忙？",qpy:"Nǐ bàba de gōngzuò máng bù máng?",opts:["他的工作很忙，每天都很累。","我住在臺灣。","謝謝，再見。","我要去公園玩。"],ans:0,lesson:"L4",py:"Tā de gōngzuò hěn máng, měitiān dōu hěn lèi."},
+  {q:"你媽媽在哪裡工作？",qpy:"Nǐ māma zài nǎlǐ gōngzuò?",opts:["她是小學老師。","她很喜歡音樂。","她住在加州。","她每天打網球。"],ans:0,lesson:"L4",py:"Tā shì xiǎoxué lǎoshī."},
+  {q:"他每天都很累嗎？",qpy:"Tā měitiān dōu hěn lèi ma?",opts:["是啊，他的工作很忙。","不是，他喜歡跑步。","他住在臺北。","他是我朋友。"],ans:0,lesson:"L4",py:"Shì a, tā de gōngzuò hěn máng."},
+  {q:"你爸爸喜歡他的工作嗎？",qpy:"Nǐ bàba xǐhuān tā de gōngzuò ma?",opts:["他說教書不累，他很喜歡。","他在電腦公司工作。","他每天去公園。","他不喜歡音樂。"],ans:0,lesson:"L4",py:"Tā shuō jiāoshū bù lèi, tā hěn xǐhuān."},
+  {q:"你媽媽教什麼？",qpy:"Nǐ māma jiāo shénme?",opts:["她在大學教法文。","她喜歡小孩子。","她每天很忙。","她住在美國。"],ans:0,lesson:"L4",py:"Tā zài dàxué jiāo Fǎwén."},
+  {q:"你爸爸在哪裡工作？",qpy:"Nǐ bàba zài nǎlǐ gōngzuò?",opts:["他在電腦公司工作。","他喜歡教書。","他今天很累。","他是老師。"],ans:0,lesson:"L4",py:"Tā zài diànnǎo gōngsī gōngzuò."},
+  {q:"老師的工作累不累？",qpy:"Lǎoshī de gōngzuò lèi bù lèi?",opts:["她說教書不累。","老師很忙每天。","她住在學校。","老師喜歡法文。"],ans:0,lesson:"L4",py:"Tā shuō jiāoshū bù lèi."},
+  {q:"你今天忙不忙？",qpy:"Nǐ jīntiān máng bù máng?",opts:["很忙，我每天都有很多工作。","我住在臺灣。","我喜歡打網球。","我是小學老師。"],ans:0,lesson:"L4",py:"Hěn máng, wǒ měitiān dōu yǒu hěn duō gōngzuò."},
+  {q:"你好，請問你叫什麼名字？",qpy:"Nǐ hǎo, qǐng wèn nǐ jiào shénme míngzì?",opts:["我叫家文，很高興認識你！","我很好謝謝。","我不客氣。","我去公園。"],ans:0,lesson:"L5",py:"Wǒ jiào Jiāwén, hěn gāoxìng rènshì nǐ!"},
+  {q:"認識你很高興！",qpy:"Rènshì nǐ hěn gāoxìng!",opts:["我也很高興認識你！","謝謝，再見。","好，沒問題。","我要去公園。"],ans:0,lesson:"L5",py:"Wǒ yě hěn gāoxìng rènshì nǐ!"},
+  {q:"你平常住在哪裡？",qpy:"Nǐ píngcháng zhù zài nǎlǐ?",opts:["我平常住在臺灣。","我住在學校。","我住在辦公室。","我住在公園。"],ans:0,lesson:"L5",py:"Wǒ píngcháng zhù zài Táiwān."},
+  {q:"你現在在美國做什麼？",qpy:"Nǐ xiànzài zài Měiguó zuò shénme?",opts:["現在學校放假，我來美國玩。","我在工作。","我住在美國。","我喜歡美國。"],ans:0,lesson:"L5",py:"Xiànzài xuéxiào fàngjià, wǒ lái Měiguó wán."},
+  {q:"這是誰？",qpy:"Zhè shì shéi?",opts:["這是我弟弟，他叫王家文。","這是我工作。","這是辦公室。","這是學校。"],ans:0,lesson:"L5",py:"Zhè shì wǒ dìdi, tā jiào Wáng Jiāwén."},
+  {q:"你想去哪裡玩？",qpy:"Nǐ xiǎng qù nǎlǐ wán?",opts:["我想去迪士尼樂園玩。","我想住在臺灣。","我想去工作。","我想去學校。"],ans:0,lesson:"L5",py:"Wǒ xiǎng qù Díshìní Lèyuán wán."},
+  {q:"你有好朋友嗎？",qpy:"Nǐ yǒu hǎo péngyǒu ma?",opts:["有，我有很多好朋友。","沒有，我很忙。","我的朋友是老師。","朋友住在公園。"],ans:0,lesson:"L5",py:"Yǒu, wǒ yǒu hěn duō hǎo péngyǒu."},
+  {q:"好久不見！你最近好嗎？",qpy:"Hǎojiǔ bùjiàn! Nǐ zuìjìn hǎo ma?",opts:["好久不見！我最近很好，謝謝。","我住在臺灣。","我去公園玩。","我是你朋友。"],ans:0,lesson:"L5",py:"Hǎojiǔ bùjiàn! Wǒ zuìjìn hěn hǎo, xièxie."},
+  {q:"你喜歡運動嗎？",qpy:"Nǐ xǐhuān yùndòng ma?",opts:["喜歡！我平常喜歡跑步。","我是學校。","謝謝你的家。","他很累今天。"],ans:0,lesson:"L6",py:"Xǐhuān! Wǒ píngcháng xǐhuān pǎobù."},
+  {q:"你週末喜歡做什麼？",qpy:"Nǐ zhōumò xǐhuān zuò shénme?",opts:["我週末喜歡去打網球。","我週末在辦公室。","我週末喜歡工作。","我週末去學校。"],ans:0,lesson:"L6",py:"Wǒ zhōumò xǐhuān qù dǎ wǎngqiú."},
+  {q:"你喜歡聽音樂嗎？",qpy:"Nǐ xǐhuān tīng yīnyuè ma?",opts:["很喜歡！我常常聽音樂。","我喜歡看音樂。","音樂很累。","我不聽音樂。"],ans:0,lesson:"L6",py:"Hěn xǐhuān! Wǒ chángcháng tīng yīnyuè."},
+  {q:"你晚上常常做什麼？",qpy:"Nǐ wǎnshàng chángcháng zuò shénme?",opts:["我晚上常常在家看電視。","我晚上去工作。","我晚上打電話。","我晚上去學校。"],ans:0,lesson:"L6",py:"Wǒ wǎnshàng chángcháng zài jiā kàn diànshì."},
+  {q:"你哥哥喜歡什麼運動？",qpy:"Nǐ gēgē xǐhuān shénme yùndòng?",opts:["他喜歡跑步，週末喜歡打網球。","他喜歡看電視。","他喜歡唱歌跳舞。","他喜歡法文。"],ans:0,lesson:"L6",py:"Tā xǐhuān pǎobù, zhōumò xǐhuān dǎ wǎngqiú."},
+  {q:"你們一起喜歡做什麼？",qpy:"Nǐmen yīqǐ xǐhuān zuò shénme?",opts:["我們都喜歡唱歌，可是不喜歡跳舞。","我們喜歡工作。","我們住在一起。","我們去學校。"],ans:0,lesson:"L6",py:"Wǒmen dōu xǐhuān chànggē, kěshì bù xǐhuān tiàowǔ."},
+  {q:"可是你不喜歡運動嗎？",qpy:"Kěshì nǐ bù xǐhuān yùndòng ma?",opts:["對，可是我喜歡聽音樂和唱歌。","我很喜歡運動。","運動很好。","我喜歡跑步。"],ans:0,lesson:"L6",py:"Duì, kěshì wǒ xǐhuān tīng yīnyuè hàn chànggē."},
+  {q:"你還喜歡做什麼？",qpy:"Nǐ hái xǐhuān zuò shénme?",opts:["我還喜歡跳舞和看電視。","我還喜歡工作。","我還喜歡睡覺。","我還喜歡學校。"],ans:0,lesson:"L6",py:"Wǒ hái xǐhuān tiàowǔ hàn kàn diànshì."},
+  {q:"請問林小姐在嗎？",qpy:"Qǐng wèn Lín xiǎojiě zài ma?",opts:["她現在不在辦公室。","我打電話給你。","好久不見！","她喜歡音樂。"],ans:0,lesson:"L7",py:"Tā xiànzài bú zài bàngōngshì."},
+  {q:"請問您是哪位？",qpy:"Qǐng wèn nín shì nǎ wèi?",opts:["我是北電公司的Gloria。","我是老師。","我是你朋友。","我叫家文。"],ans:0,lesson:"L7",py:"Wǒ shì Běidiàn Gōngsī de Gloria."},
+  {q:"林小姐什麼時候回來？",qpy:"Lín xiǎojiě shénme shíhòu huílái?",opts:["她下午回來。","她現在回來。","她明天回來。","她不回來。"],ans:0,lesson:"L7",py:"Tā xiàwǔ huílái."},
+  {q:"請你下午給我打電話，好不好？",qpy:"Qǐng nǐ xiàwǔ gěi wǒ dǎ diànhuà, hǎo bù hǎo?",opts:["好，沒問題。","我不在辦公室。","我喜歡電視。","她很高興。"],ans:0,lesson:"L7",py:"Hǎo, méi wèntí."},
+  {q:"麻煩您，可以留言嗎？",qpy:"Máfán nín, kěyǐ liú yán ma?",opts:["當然可以，請說。","我不在。","謝謝再見。","她下午回來。"],ans:0,lesson:"L7",py:"Dāngrán kěyǐ, qǐng shuō."},
+  {q:"您的電話號碼是幾號？",qpy:"Nín de diànhuà hàomǎ shì jǐ hào?",opts:["我的號碼是五一七三六零四二五九。","我沒有電話。","我的號碼很長。","請問您是哪位？"],ans:0,lesson:"L7",py:"Wǒ de hàomǎ shì wǔ yī qī sān liù líng sì èr wǔ jiǔ."},
+  {q:"喂，台一銀行，您好！",qpy:"Wéi, Táiyī Yínháng, nín hǎo!",opts:["您好！請問林美美小姐在嗎？","你好，我是家文。","謝謝，再見。","我想打電話。"],ans:0,lesson:"L7",py:"Nín hǎo! Qǐng wèn Lín Měiměi xiǎojiě zài ma?"},
+  {q:"我可以留話嗎？",qpy:"Wǒ kěyǐ liú huà ma?",opts:["當然，麻煩您請她回來以後給我打電話。","好的，謝謝。","沒問題，再見。","請問您是哪位？"],ans:0,lesson:"L7",py:"Dāngrán, máfán nín qǐng tā huílái yǐhòu gěi wǒ dǎ diànhuà."},
+  {q:"今天是幾月幾號？",qpy:"Jīntiān shì jǐ yuè jǐ hào?",opts:["今天是八月十一號。","我十七歲。","明天是生日。","我要禮物。"],ans:0,lesson:"L8",py:"Jīntiān shì bāyuè shíyī hào."},
+  {q:"你今年幾歲？",qpy:"Nǐ jīnnián jǐ suì?",opts:["我今年二十歲。","我是朋友。","我住在台灣。","今天很忙。"],ans:0,lesson:"L8",py:"Wǒ jīnnián èrshí suì."},
+  {q:"你要什麼生日禮物？",qpy:"Nǐ yào shénme shēngrì lǐwù?",opts:["我要一雙運動鞋，可以嗎？","我要去吃大餐。","今天是八月。","我住在學校。"],ans:0,lesson:"L8",py:"Wǒ yào yī shuāng yùndòng xié, kěyǐ ma?"},
+  {q:"我們去打網球，好不好？",qpy:"Wǒmen qù dǎ wǎngqiú, hǎo bù hǎo?",opts:["好！我們什麼時候去？","我的號碼是五一七。","她是老師。","我喜歡法文。"],ans:0,lesson:"L8",py:"Hǎo! Wǒmen shénme shíhòu qù?"},
+  {q:"祝你生日快樂！你今年幾歲了？",qpy:"Zhù nǐ shēngrì kuàilè! Nǐ jīnnián jǐ suì le?",opts:["謝謝！我今年十七歲。","謝謝，我很高興。","我的生日是八月。","謝謝，我要禮物。"],ans:0,lesson:"L8",py:"Xièxie! Wǒ jīnnián shíqī suì."},
+  {q:"我請你去吃大餐，好不好？",qpy:"Wǒ qǐng nǐ qù chī dàcān, hǎo bù hǎo?",opts:["好，謝謝你！沒問題。","我不喜歡大餐。","我今天很忙。","我要回家。"],ans:0,lesson:"L8",py:"Hǎo, xièxie nǐ! Méi wèntí."},
+  {q:"你打算送她什麼生日禮物？",qpy:"Nǐ dǎsuàn sòng tā shénme shēngrì lǐwù?",opts:["我打算送她一雙運動鞋。","我打算唱生日歌。","我打算去公園。","我打算打電話。"],ans:0,lesson:"L8",py:"Wǒ dǎsuàn sòng tā yī shuāng yùndòng xié."},
+  {q:"今天是你的生日嗎？",qpy:"Jīntiān shì nǐ de shēngrì ma?",opts:["是啊！今天是我十七歲的生日。","不是，今天是八月。","是的，我很忙。","不是，我要工作。"],ans:0,lesson:"L8",py:"Shì a! Jīntiān shì wǒ shíqī suì de shēngrì."},
+  // L9
+  {q:"今天星期幾？",qpy:"Jīntiān xīngqí jǐ?",opts:["今天星期三。","今天三點。","今天八月。","今天很忙。"],ans:0,lesson:"L9",py:"Jīntiān xīngqísān."},
+  {q:"你星期五有時間嗎？",qpy:"Nǐ xīngqíwǔ yǒu shíjiān ma?",opts:["有，我星期五有時間。","沒有，我三點下課。","有，我很忙。","沒有，我在餐廳。"],ans:0,lesson:"L9",py:"Yǒu, wǒ xīngqíwǔ yǒu shíjiān."},
+  {q:"你要不要跟我們一起去吃飯？",qpy:"Nǐ yào bú yào gēn wǒmen yīqǐ qù chī fàn?",opts:["好啊，我們幾點去？","不行，我喜歡音樂。","好，我五點下課。","不行，我在辦公室。"],ans:0,lesson:"L9",py:"Hǎo a, wǒmen jǐ diǎn qù?"},
+  {q:"星期六不行，星期五怎麼樣？",qpy:"Xīngqíliù bù xíng, xīngqíwǔ zěnmeyàng?",opts:["星期五也行！","星期五不在。","星期五我下課。","星期五很好吃。"],ans:0,lesson:"L9",py:"Xīngqíwǔ yě xíng!"},
+  {q:"我們幾點在餐廳見？",qpy:"Wǒmen jǐ diǎn zài cāntīng jiàn?",opts:["六點半在餐廳見，怎麼樣？","三點下課見。","星期五見。","好，沒問題。"],ans:0,lesson:"L9",py:"Liù diǎn bàn zài cāntīng jiàn, zěnmeyàng?"},
+  {q:"那家餐廳的牛肉麵怎麼樣？",qpy:"Nà jiā cāntīng de niúròumiàn zěnmeyàng?",opts:["那家餐廳的牛肉麵最好吃！","牛肉麵很忙。","牛肉麵在辦公室。","我不喜歡餐廳。"],ans:0,lesson:"L9",py:"Nà jiā cāntīng de niúròumiàn zuì hǎochī!"},
+  {q:"現在幾點？",qpy:"Xiànzài jǐ diǎn?",opts:["現在十點二十分。","現在星期三。","現在八月。","現在很忙。"],ans:0,lesson:"L9",py:"Xiànzài shí diǎn èrshí fēn."},
+  {q:"你平常幾點下課？",qpy:"Nǐ píngcháng jǐ diǎn xiàkè?",opts:["我平常五點下課。","我平常星期五下課。","我平常在餐廳下課。","我平常很忙。"],ans:0,lesson:"L9",py:"Wǒ píngcháng wǔ diǎn xiàkè."},,
+  // L10
+  {q:"你現在學中文，學得怎麼樣？",qpy:"Nǐ xiànzài xué Zhōngwén, xué de zěnmeyàng?",opts:["我覺得自己學得不錯。","我覺得很難。","我不學中文。","我學得很快樂。"],ans:0,lesson:"L10",py:"Wǒ juéde zìjǐ xué de búcuò."},
+  {q:"學中文難不難？",qpy:"Xué Zhōngwén nán bù nán?",opts:["我覺得說話不難，可是寫字有一點難。","中文很好吃。","我覺得中文不錯。","中文很好，謝謝。"],ans:0,lesson:"L10",py:"Wǒ juéde shuō huà bù nán, kěshì xiě zì yǒu yīdiǎn nán."},
+  {q:"你會不會說中文？",qpy:"Nǐ huì bú huì shuō Zhōngwén?",opts:["會，我說得不錯。","不會，我很忙。","會，我很高興。","不會，我喜歡咖啡。"],ans:0,lesson:"L10",py:"Huì, wǒ shuō de búcuò."},
+  {q:"你會寫多少字？",qpy:"Nǐ huì xiě duōshǎo zì?",opts:["差不多三十個字。","我會寫很難。","我有一點字。","差不多星期三。"],ans:0,lesson:"L10",py:"Chābùduō sānshí ge zì."},
+  {q:"你平常跟誰一起練習說話？",qpy:"Nǐ píngcháng gēn shéi yīqǐ liànxí shuō huà?",opts:["我常常跟明文聊天，練習我的中文。","我跟咖啡練習。","我不練習說話。","我跟自己練習。"],ans:0,lesson:"L10",py:"Wǒ chángcháng gēn Míngwén liáo tiān, liànxí wǒ de Zhōngwén."},
+  {q:"你今天怎麼樣？",qpy:"Nǐ jīntiān zěnmeyàng?",opts:["不錯，可是有點累。","我今天很咖啡。","不錯，我會寫字。","我今天學中文。"],ans:0,lesson:"L10",py:"Búcuò, kěshì yǒu diǎn lèi."},
+  {q:"這雙運動鞋怎麼樣？",qpy:"Zhè shuāng yùndòng xié zěnmeyàng?",opts:["不錯，可是有一點貴。","很好吃，謝謝。","這雙鞋很難。","不錯，我會喝咖啡。"],ans:0,lesson:"L10",py:"Búcuò, kěshì yǒu yīdiǎn guì."},
+  {q:"你會不會做飯？",qpy:"Nǐ huì bú huì zuò fàn?",opts:["會，我常常自己在家做飯。","不會，我很忙。","會，我很高興。","不會，我喜歡練習。"],ans:0,lesson:"L10",py:"Huì, wǒ chángcháng zìjǐ zài jiā zuò fàn."}
+];
+var FITB=[
+  {s:"我爸爸在電腦公司＿＿作。",ans:"工",opts:["工","去","買","說"],lesson:"L4",full:"我爸爸在電腦公司工作。",py:"Wǒ bàba zài diànnǎo gōngsī gōngzuò."},
+  {s:"她＿＿歡小孩子，說教書不累。",ans:"喜",opts:["喜","高","平","很"],lesson:"L4",full:"她喜歡小孩子，說教書不累。",py:"Tā xǐhuān xiǎo háizi, shuō jiāoshū bù lèi."},
+  {s:"他的工作很忙，他每天都很＿＿。",ans:"累",opts:["累","忙","好","高"],lesson:"L4",full:"他的工作很忙，他每天都很累。",py:"Tā de gōngzuò hěn máng, tā měitiān dōu hěn lèi."},
+  {s:"我媽媽是小＿＿老師。",ans:"學",opts:["學","孩","好","愛"],lesson:"L4",full:"我媽媽是小學老師。",py:"Wǒ māma shì xiǎoxué lǎoshī."},
+  {s:"我爸爸也是老師，他在大學教法＿＿。",ans:"文",opts:["文","語","書","國"],lesson:"L4",full:"我爸爸也是老師，他在大學教法文。",py:"Wǒ bàba yě shì lǎoshī, tā zài dàxué jiāo Fǎwén."},
+  {s:"她說教書不＿＿，她很喜歡。",ans:"累",opts:["累","忙","好","難"],lesson:"L4",full:"她說教書不累，她很喜歡。",py:"Tā shuō jiāoshū bù lèi, tā hěn xǐhuān."},
+  {s:"他＿＿天都在電腦公司工作。",ans:"每",opts:["每","今","明","那"],lesson:"L4",full:"他每天都在電腦公司工作。",py:"Tā měitiān dōu zài diànnǎo gōngsī gōngzuò."},
+  {s:"我爸爸的工作很忙，可是他不＿＿。",ans:"累",opts:["累","忙","去","來"],lesson:"L4",full:"我爸爸的工作很忙，可是他不累。",py:"Wǒ bàba de gōngzuò hěn máng, kěshì tā bù lèi."},
+  {s:"這是我朋友Gloria，認識你很高＿＿。",ans:"興",opts:["興","歡","樂","好"],lesson:"L5",full:"這是我朋友Gloria，認識你很高興。",py:"Zhè shì wǒ péngyǒu Gloria, rènshì nǐ hěn gāoxìng."},
+  {s:"我平常住在臺灣，現在學校＿＿假，我來美國玩。",ans:"放",opts:["放","去","來","做"],lesson:"L5",full:"我平常住在臺灣，現在學校放假，我來美國玩。",py:"Wǒ píngcháng zhù zài Táiwān, xiànzài xuéxiào fàngjià, wǒ lái Měiguó wán."},
+  {s:"這＿＿我弟弟王家文。",ans:"是",opts:["是","在","有","去"],lesson:"L5",full:"這是我弟弟王家文。",py:"Zhè shì wǒ dìdi Wáng Jiāwén."},
+  {s:"我也很高＿＿認識你。",ans:"興",opts:["興","歡","樂","好"],lesson:"L5",full:"我也很高興認識你。",py:"Wǒ yě hěn gāoxìng rènshì nǐ."},
+  {s:"你也在美＿＿念書嗎？",ans:"國",opts:["國","家","州","地"],lesson:"L5",full:"你也在美國念書嗎？",py:"Nǐ yě zài Měiguó niàn shū ma?"},
+  {s:"我想去迪士尼樂＿＿玩。",ans:"園",opts:["園","公","國","地"],lesson:"L5",full:"我想去迪士尼樂園玩。",py:"Wǒ xiǎng qù Díshìní Lèyuán wán."},
+  {s:"不是，我平常住在臺＿＿。",ans:"灣",opts:["灣","北","南","中"],lesson:"L5",full:"不是，我平常住在臺灣。",py:"Bú shì, wǒ píngcháng zhù zài Táiwān."},
+  {s:"現在學校放假，我來美國＿＿。",ans:"玩",opts:["玩","住","學","去"],lesson:"L5",full:"現在學校放假，我來美國玩。",py:"Xiànzài xuéxiào fàngjià, wǒ lái Měiguó wán."},
+  {s:"他平常喜歡跑步，週末喜歡去打＿＿球。",ans:"網",opts:["網","運","音","電"],lesson:"L6",full:"他平常喜歡跑步，週末喜歡去打網球。",py:"Tā píngcháng xǐhuān pǎobù, zhōumò xǐhuān qù dǎ wǎngqiú."},
+  {s:"我不喜歡運動。我喜歡唱歌、聽音＿＿和跳舞。",ans:"樂",opts:["樂","視","話","動"],lesson:"L6",full:"我不喜歡運動。我喜歡唱歌、聽音樂和跳舞。",py:"Wǒ bù xǐhuān yùndòng. Wǒ xǐhuān chànggē, tīng yīnyuè hàn tiàowǔ."},
+  {s:"我晚上常常在家看電＿＿。",ans:"視",opts:["視","話","腦","影"],lesson:"L6",full:"我晚上常常在家看電視。",py:"Wǒ wǎnshàng chángcháng zài jiā kàn diànshì."},
+  {s:"我哥哥和我也喜歡唱歌，可＿＿我們都不喜歡跳舞。",ans:"是",opts:["是","以","以","有"],lesson:"L6",full:"我哥哥和我也喜歡唱歌，可是我們都不喜歡跳舞。",py:"Wǒ gēgē hàn wǒ yě xǐhuān chànggē, kěshì wǒmen dōu bù xǐhuān tiàowǔ."},
+  {s:"週＿＿我喜歡去打網球。",ans:"末",opts:["末","日","天","上"],lesson:"L6",full:"週末我喜歡去打網球。",py:"Zhōumò wǒ xǐhuān qù dǎ wǎngqiú."},
+  {s:"我還喜歡聽音樂＿＿跳舞。",ans:"和",opts:["和","或","可","但"],lesson:"L6",full:"我還喜歡聽音樂和跳舞。",py:"Wǒ hái xǐhuān tīng yīnyuè hàn tiàowǔ."},
+  {s:"她不喜歡運動，她喜歡唱歌、聽音樂和跳＿＿。",ans:"舞",opts:["舞","步","球","操"],lesson:"L6",full:"她不喜歡運動，她喜歡唱歌、聽音樂和跳舞。",py:"Tā bù xǐhuān yùndòng, tā xǐhuān chànggē, tīng yīnyuè hàn tiàowǔ."},
+  {s:"他平常喜歡跑＿＿。",ans:"步",opts:["步","球","舞","操"],lesson:"L6",full:"他平常喜歡跑步。",py:"Tā píngcháng xǐhuān pǎobù."},
+  {s:"林小姐現在不在辦公＿＿，請問您是哪位？",ans:"室",opts:["室","家","校","園"],lesson:"L7",full:"林小姐現在不在辦公室，請問您是哪位？",py:"Lín xiǎojiě xiànzài bú zài bàngōngshì, qǐng wèn nín shì nǎ wèi?"},
+  {s:"麻煩您，請她回來以後給我＿＿電話。",ans:"打",opts:["打","說","教","買"],lesson:"L7",full:"麻煩您，請她回來以後給我打電話。",py:"Máfán nín, qǐng tā huílái yǐhòu gěi wǒ dǎ diànhuà."},
+  {s:"請問您的手機號＿＿是幾號？",ans:"碼",opts:["碼","字","文","語"],lesson:"L7",full:"請問您的手機號碼是幾號？",py:"Qǐng wèn nín de shǒujī hàomǎ shì jǐ hào?"},
+  {s:"喂，您＿＿！請問林美美小姐在嗎？",ans:"好",opts:["好","在","來","去"],lesson:"L7",full:"喂，您好！請問林美美小姐在嗎？",py:"Wéi, nín hǎo! Qǐng wèn Lín Měiměi xiǎojiě zài ma?"},
+  {s:"她下午回＿＿，麻煩您請她給我打電話。",ans:"來",opts:["來","去","在","家"],lesson:"L7",full:"她下午回來，麻煩您請她給我打電話。",py:"Tā xiàwǔ huílái, máfán nín qǐng tā gěi wǒ dǎ diànhuà."},
+  {s:"請問您是＿＿位？",ans:"哪",opts:["哪","那","什","幾"],lesson:"L7",full:"請問您是哪位？",py:"Qǐng wèn nín shì nǎ wèi?"},
+  {s:"我是北電公司的Gloria，請＿＿林小姐什麼時候回來。",ans:"問",opts:["問","說","叫","給"],lesson:"L7",full:"我是北電公司的Gloria，請問林小姐什麼時候回來。",py:"Wǒ shì Běidiàn Gōngsī de Gloria, qǐng wèn Lín xiǎojiě shénme shíhòu huílái."},
+  {s:"麻＿＿您，請她回來以後給我打電話。",ans:"煩",opts:["煩","問","謝","請"],lesson:"L7",full:"麻煩您，請她回來以後給我打電話。",py:"Máfán nín, qǐng tā huílái yǐhòu gěi wǒ dǎ diànhuà."},
+  {s:"明天是八月十一＿＿。噢！明天是你的生日。",ans:"號",opts:["號","月","年","歲"],lesson:"L8",full:"明天是八月十一號。噢！明天是你的生日。",py:"Míngtiān shì bāyuè shíyī hào. Òu! Míngtiān shì nǐ de shēngrì."},
+  {s:"家文，祝你生日＿＿樂！",ans:"快",opts:["快","高","大","好"],lesson:"L8",full:"家文，祝你生日快樂！",py:"Jiāwén, zhù nǐ shēngrì kuàilè!"},
+  {s:"我要一＿＿運動鞋，可以嗎？",ans:"雙",opts:["雙","個","位","月"],lesson:"L8",full:"我要一雙運動鞋，可以嗎？",py:"Wǒ yào yī shuāng yùndòng xié, kěyǐ ma?"},
+  {s:"好，我們今天晚上去＿＿。你還要什麼？",ans:"買",opts:["買","吃","玩","送"],lesson:"L8",full:"好，我們今天晚上去買。你還要什麼？",py:"Hǎo, wǒmen jīntiān wǎnshàng qù mǎi. Nǐ hái yào shénme?"},
+  {s:"明天是我十七＿＿的生日。",ans:"歲",opts:["歲","號","月","年"],lesson:"L8",full:"明天是我十七歲的生日。",py:"Míngtiān shì wǒ shíqī suì de shēngrì."},
+  {s:"你請我去吃大＿＿，好不好？",ans:"餐",opts:["餐","飯","菜","食"],lesson:"L8",full:"你請我去吃大餐，好不好？",py:"Nǐ qǐng wǒ qù chī dàcān, hǎo bù hǎo?"},
+  {s:"我打算＿＿她一雙運動鞋。",ans:"送",opts:["送","買","給","要"],lesson:"L8",full:"我打算送她一雙運動鞋。",py:"Wǒ dǎsuàn sòng tā yī shuāng yùndòng xié."},
+  {s:"今天是幾月幾＿＿？",ans:"號",opts:["號","日","年","月"],lesson:"L8",full:"今天是幾月幾號？",py:"Jīntiān shì jǐ yuè jǐ hào?"},
+  // L9
+  {s:"今天星＿＿幾？",ans:"期",opts:["期","天","日","月"],lesson:"L9",full:"今天星期幾？",py:"Jīntiān xīngqí jǐ?"},
+  {s:"你星期五有時＿＿嗎？",ans:"間",opts:["間","候","點","分"],lesson:"L9",full:"你星期五有時間嗎？",py:"Nǐ xīngqíwǔ yǒu shíjiān ma?"},
+  {s:"明文，這位是我同＿＿Lisa。",ans:"事",opts:["事","學","友","人"],lesson:"L9",full:"明文，這位是我同事Lisa。",py:"Míngwén, zhè wèi shì wǒ tóngshì Lisa."},
+  {s:"星期六不行，星期五怎麼＿＿？",ans:"樣",opts:["樣","行","好","去"],lesson:"L9",full:"星期六不行，星期五怎麼樣？",py:"Xīngqíliù bù xíng, xīngqíwǔ zěnmeyàng?"},
+  {s:"我們星期五晚上六點＿＿在餐廳見。",ans:"半",opts:["半","點","分","時"],lesson:"L9",full:"我們星期五晚上六點半在餐廳見。",py:"Wǒmen xīngqíwǔ wǎnshàng liù diǎn bàn zài cāntīng jiàn."},
+  {s:"那家餐廳的牛肉麵最好＿＿。",ans:"吃",opts:["吃","喝","做","看"],lesson:"L9",full:"那家餐廳的牛肉麵最好吃。",py:"Nà jiā cāntīng de niúròumiàn zuì hǎochī."},
+  {s:"你要不要跟我們一＿＿去？",ans:"起",opts:["起","去","來","好"],lesson:"L9",full:"你要不要跟我們一起去？",py:"Nǐ yào bú yào gēn wǒmen yīqǐ qù?"},
+  {s:"太好＿＿！那家餐廳的牛肉麵最好吃。",ans:"了",opts:["了","的","嗎","啊"],lesson:"L9",full:"太好了！那家餐廳的牛肉麵最好吃。",py:"Tài hǎo le! Nà jiā cāntīng de niúròumiàn zuì hǎochī."},,
+  // L10
+  {s:"我覺得說話不＿＿，可是寫字有一點難。",ans:"難",opts:["難","快","貴","累"],lesson:"L10",full:"我覺得說話不難，可是寫字有一點難。",py:"Wǒ juéde shuō huà bù nán, kěshì xiě zì yǒu yīdiǎn nán."},
+  {s:"我覺得自己學＿＿不錯。",ans:"得",opts:["得","的","是","很"],lesson:"L10",full:"我覺得自己學得不錯。",py:"Wǒ juéde zìjǐ xué de búcuò."},
+  {s:"我＿＿說中文，也會寫我的中文名字。",ans:"會",opts:["會","學","很","都"],lesson:"L10",full:"我會說中文，也會寫我的中文名字。",py:"Wǒ huì shuō Zhōngwén, yě huì xiě wǒ de Zhōngwén míngzì."},
+  {s:"差不多三十＿＿字。",ans:"個",opts:["個","杯","雙","位"],lesson:"L10",full:"差不多三十個字。",py:"Chābùduō sānshí ge zì."},
+  {s:"我常常跟明文聊天，練習我的中＿＿。",ans:"文",opts:["文","語","話","字"],lesson:"L10",full:"我常常跟明文聊天，練習我的中文。",py:"Wǒ chángcháng gēn Míngwén liáo tiān, liànxí wǒ de Zhōngwén."},
+  {s:"不錯，可是有一＿＿貴。",ans:"點",opts:["點","下","個","杯"],lesson:"L10",full:"不錯，可是有一點貴。",py:"Búcuò, kěshì yǒu yīdiǎn guì."},
+  {s:"Gloria，休息一＿＿，我們去喝杯咖啡吧！",ans:"下",opts:["下","點","個","次"],lesson:"L10",full:"Gloria，休息一下，我們去喝杯咖啡吧！",py:"Gloria, xiūxí yīxià, wǒmen qù hē bēi kāfēi ba!"},
+  {s:"學中文＿＿不難？",ans:"難",opts:["難","快","好","會"],lesson:"L10",full:"學中文難不難？",py:"Xué Zhōngwén nán bù nán?"}
+];
+var ERRORS=[
+  {s:"我爸爸在電腦公司工作，我媽媽是小孩老師。",spy:"Wǒ bàba zài diànnǎo gōngsī gōngzuò, wǒ māma shì xiǎohái lǎoshī.",wrong:"小孩老師",right:"小學老師",py:"xiǎoxué lǎoshī",fullpy:"Wǒ bàba zài diànnǎo gōngsī gōngzuò, wǒ māma shì xiǎoxué lǎoshī.",exp:"The correct term is 小學老師 (xiǎoxué lǎoshī) — elementary school teacher.",lesson:"L4"},
+  {s:"他的工作很忙，他每天都很高興。",spy:"Tā de gōngzuò hěn máng, tā měitiān dōu hěn gāoxìng.",wrong:"高興",right:"累",py:"lèi",fullpy:"Tā de gōngzuò hěn máng, tā měitiān dōu hěn lèi.",exp:"The text says he is very tired (累 lèi) from working every day.",lesson:"L4"},
+  {s:"我爸爸在電腦公司工做，我媽媽是老師。",spy:"Wǒ bàba zài diànnǎo gōngsī gōngzuò, wǒ māma shì lǎoshī.",wrong:"工做",right:"工作",py:"gōngzuò",fullpy:"Wǒ bàba zài diànnǎo gōngsī gōngzuò, wǒ māma shì lǎoshī.",exp:"The word for work is 工作 (gōngzuò), not 工做. 做 alone means to do.",lesson:"L4"},
+  {s:"她喜歡教書，她說教書很累。",spy:"Tā xǐhuān jiāoshū, tā shuō jiāoshū hěn lèi.",wrong:"很累",right:"不累",py:"bù lèi",fullpy:"Tā xǐhuān jiāoshū, tā shuō jiāoshū bù lèi.",exp:"In the text she says teaching is not tiring (教書不累), not that it is tiring.",lesson:"L4"},
+  {s:"他每天都在電腦公司工作，他很忙可是很快樂。",spy:"Tā měitiān dōu zài diànnǎo gōngsī gōngzuò, tā hěn máng kěshì hěn kuàilè.",wrong:"快樂",right:"累",py:"lèi",fullpy:"Tā měitiān dōu zài diànnǎo gōngsī gōngzuò, tā hěn máng kěshì hěn lèi.",exp:"The text says he is tired (累 lèi) every day, not happy.",lesson:"L4"},
+  {s:"我媽媽是大學老師，她教法語。",spy:"Wǒ māma shì dàxué lǎoshī, tā jiāo Fǎyǔ.",wrong:"法語",right:"法文",py:"Fǎwén",fullpy:"Wǒ māma shì dàxué lǎoshī, tā jiāo Fǎwén.",exp:"The vocabulary word used in this lesson is 法文 (Fǎwén) for the French language.",lesson:"L4"},
+  {s:"我平常住在臺灣，現在學校放假，我去美國玩。",spy:"Wǒ píngcháng zhù zài Táiwān, xiànzài xuéxiào fàngjià, wǒ qù Měiguó wán.",wrong:"去",right:"來",py:"lái",fullpy:"Wǒ píngcháng zhù zài Táiwān, xiànzài xuéxiào fàngjià, wǒ lái Měiguó wán.",exp:"Since the speaker is already in America, they use 來 (lái) not 去 (qù).",lesson:"L5"},
+  {s:"這是我朋友Gloria，認識你很快樂。",spy:"Zhè shì wǒ péngyǒu Gloria, rènshì nǐ hěn kuàilè.",wrong:"快樂",right:"高興",py:"gāoxìng",fullpy:"Zhè shì wǒ péngyǒu Gloria, rènshì nǐ hěn gāoxìng.",exp:"The correct phrase for glad to meet you uses 高興 (gāoxìng), not 快樂.",lesson:"L5"},
+  {s:"你也在美國念書嗎？不是，我現在學校上課。",spy:"Nǐ yě zài Měiguó niàn shū ma? Bú shì, wǒ xiànzài xuéxiào shàngkè.",wrong:"上課",right:"放假",py:"fàngjià",fullpy:"Nǐ yě zài Měiguó niàn shū ma? Bú shì, wǒ xiànzài xuéxiào fàngjià.",exp:"The story says school is on break (放假 fàngjià), not in session.",lesson:"L5"},
+  {s:"家文，這是我同學Gloria。",spy:"Jiāwén, zhè shì wǒ tóngxué Gloria.",wrong:"同學",right:"朋友",py:"péngyǒu",fullpy:"Jiāwén, zhè shì wǒ péngyǒu Gloria.",exp:"Gloria is introduced as a 朋友 (friend), not a 同學 (classmate).",lesson:"L5"},
+  {s:"我想去國家公園和迪士尼公園玩。",spy:"Wǒ xiǎng qù guójiā gōngyuán hàn Díshìní Gōngyuán wán.",wrong:"迪士尼公園",right:"迪士尼樂園",py:"Díshìní lèyuán",fullpy:"Wǒ xiǎng qù guójiā gōngyuán hàn Díshìní Lèyuán wán.",exp:"The correct name is 迪士尼樂園 (Díshìní lèyuán — Disneyland), not 迪士尼公園.",lesson:"L5"},
+  {s:"認識你，我很高興。妳呢？我也很高興。",spy:"Rènshì nǐ, wǒ hěn gāoxìng. Nǐ ne? Wǒ yě hěn gāoxìng.",wrong:"妳",right:"你",py:"nǐ",fullpy:"Rènshì nǐ, wǒ hěn gāoxìng. Nǐ ne? Wǒ yě hěn gāoxìng.",exp:"In standard Taiwanese Mandarin textbooks at this level, 你 is used for both genders.",lesson:"L5"},
+  {s:"我不喜歡運動，我喜歡唱歌、看音樂和跳舞。",spy:"Wǒ bù xǐhuān yùndòng, wǒ xǐhuān chànggē, kàn yīnyuè hàn tiàowǔ.",wrong:"看音樂",right:"聽音樂",py:"tīng yīnyuè",fullpy:"Wǒ bù xǐhuān yùndòng, wǒ xǐhuān chànggē, tīng yīnyuè hàn tiàowǔ.",exp:"You 聽 (tīng — listen to) music, not 看 (kàn — look at) it.",lesson:"L6"},
+  {s:"我哥哥平常喜歡走步，週末喜歡打網球。",spy:"Wǒ gēgē píngcháng xǐhuān zǒubù, zhōumò xǐhuān dǎ wǎngqiú.",wrong:"走步",right:"跑步",py:"pǎobù",fullpy:"Wǒ gēgē píngcháng xǐhuān pǎobù, zhōumò xǐhuān dǎ wǎngqiú.",exp:"Running is 跑步 (pǎo bù). 走步 means walking, which is different.",lesson:"L6"},
+  {s:"我晚上常常在家看電腦。",spy:"Wǒ wǎnshàng chángcháng zài jiā kàn diànnǎo.",wrong:"電腦",right:"電視",py:"diànshì",fullpy:"Wǒ wǎnshàng chángcháng zài jiā kàn diànshì.",exp:"Watching TV is 看電視 (diànshì). 電腦 means computer.",lesson:"L6"},
+  {s:"我還喜歡跳歌和唱舞。",spy:"Wǒ hái xǐhuān tiào gē hàn chàng wǔ.",wrong:"跳歌和唱舞",right:"唱歌和跳舞",py:"chànggē hàn tiàowǔ",fullpy:"Wǒ hái xǐhuān chànggē hàn tiàowǔ.",exp:"The correct verbs are 唱歌 (sing) and 跳舞 (dance). They were swapped.",lesson:"L6"},
+  {s:"週末我喜歡去打籃球。",spy:"Zhōumò wǒ xǐhuān qù dǎ lánqiú.",wrong:"籃球",right:"網球",py:"wǎngqiú",fullpy:"Zhōumò wǒ xǐhuān qù dǎ wǎngqiú.",exp:"The vocabulary word in this lesson is 網球 (wǎngqiú — tennis), not 籃球 (basketball).",lesson:"L6"},
+  {s:"我不喜歡運動，可是我哥哥很喜歡運動。我們都不喜歡唱歌。",spy:"Wǒ bù xǐhuān yùndòng, kěshì wǒ gēgē hěn xǐhuān yùndòng. Wǒmen dōu bù xǐhuān chànggē.",wrong:"都不喜歡",right:"也喜歡",py:"yě xǐhuān",fullpy:"Wǒ bù xǐhuān yùndòng, kěshì wǒ gēgē hěn xǐhuān. Wǒmen yě xǐhuān chànggē.",exp:"The text says both she and her brother like singing.",lesson:"L6"},
+  {s:"麻煩您，請她回來以後給我打手機。",spy:"Máfán nín, qǐng tā huílái yǐhòu gěi wǒ dǎ shǒujī.",wrong:"打手機",right:"打電話",py:"dǎ diànhuà",fullpy:"Máfán nín, qǐng tā huílái yǐhòu gěi wǒ dǎ diànhuà.",exp:"The correct phrase is 打電話 (dǎ diànhuà). 手機 alone just means cell phone.",lesson:"L7"},
+  {s:"林小姐早上不在辦公室，請問您是哪位？",spy:"Lín xiǎojiě zǎoshàng bú zài bàngōngshì, qǐng wèn nín shì nǎ wèi?",wrong:"早上",right:"現在",py:"xiànzài",fullpy:"Lín xiǎojiě xiànzài bú zài bàngōngshì, qǐng wèn nín shì nǎ wèi?",exp:"The text says she is not in the office right now (現在 xiànzài), not in the morning.",lesson:"L7"},
+  {s:"喂，您好！請問林美美小弟在嗎？",spy:"Wéi, nín hǎo! Qǐng wèn Lín Měiměi xiǎodì zài ma?",wrong:"小弟",right:"小姐",py:"xiǎojiě",fullpy:"Wéi, nín hǎo! Qǐng wèn Lín Měiměi xiǎojiě zài ma?",exp:"小姐 (xiǎojiě) means Miss or Ms. 小弟 means younger brother — very different!",lesson:"L7"},
+  {s:"我的手機號碼是五一七三六零四二五九，請你打電話給她。",spy:"Wǒ de shǒujī hàomǎ shì wǔ yī qī sān liù líng sì èr wǔ jiǔ, qǐng nǐ dǎ diànhuà gěi tā.",wrong:"她",right:"我",py:"wǒ",fullpy:"Wǒ de shǒujī hàomǎ shì wǔ yī qī sān liù líng sì èr wǔ jiǔ, qǐng nǐ dǎ diànhuà gěi wǒ.",exp:"You are giving your own number for people to call you (打電話給我), not her.",lesson:"L7"},
+  {s:"麻煩您，請問她什麼時候回到辦公室？",spy:"Máfán nín, qǐng wèn tā shénme shíhòu huídào bàngōngshì?",wrong:"回到",right:"回來",py:"huílái",fullpy:"Máfán nín, qǐng wèn tā shénme shíhòu huílái bàngōngshì?",exp:"The vocabulary word for return in this lesson is 回來 (huílái), not 回到.",lesson:"L7"},
+  {s:"請問您貴姓？",spy:"Qǐng wèn nín guì xìng?",wrong:"貴姓",right:"是哪位",py:"nín shì nǎ wèi",fullpy:"Qǐng wèn nín shì nǎ wèi?",exp:"The polite phrase used in this lesson to ask who is calling is 您是哪位 (nín shì nǎ wèi).",lesson:"L7"},
+  {s:"明天是我八月生日，我今年十七月了。",spy:"Míngtiān shì wǒ bāyuè shēngrì, wǒ jīnnián shíqī yuè le.",wrong:"十七月",right:"十七歲",py:"shíqī suì",fullpy:"Míngtiān shì wǒ bāyuè shēngrì, wǒ jīnnián shíqī suì le.",exp:"Age uses 歲 (suì), not 月 (month). Correct: 我今年十七歲。",lesson:"L8"},
+  {s:"祝你生日高興！你要什麼生日禮物？",spy:"Zhù nǐ shēngrì gāoxìng! Nǐ yào shénme shēngrì lǐwù?",wrong:"高興",right:"快樂",py:"kuàilè",fullpy:"Zhù nǐ shēngrì kuàilè! Nǐ yào shénme shēngrì lǐwù?",exp:"The birthday greeting is 生日快樂 (shēngrì kuàilè — Happy Birthday).",lesson:"L8"},
+  {s:"我要一個運動鞋，可以嗎？",spy:"Wǒ yào yīge yùndòng xié, kěyǐ ma?",wrong:"一個",right:"一雙",py:"yī shuāng",fullpy:"Wǒ yào yī shuāng yùndòng xié, kěyǐ ma?",exp:"Shoes come in pairs so you use 雙 (shuāng — pair) as the measure word, not 個.",lesson:"L8"},
+  {s:"明天是八月十一日。噢！明天是你的生日。",spy:"Míngtiān shì bāyuè shíyī rì. Òu! Míngtiān shì nǐ de shēngrì.",wrong:"日",right:"號",py:"hào",fullpy:"Míngtiān shì bāyuè shíyī hào. Òu! Míngtiān shì nǐ de shēngrì.",exp:"In spoken Taiwanese Mandarin, days of the month use 號 (hào) in conversation. 日 is more formal/written.",lesson:"L8"},
+  {s:"你請我去吃小餐，好不好？",spy:"Nǐ qǐng wǒ qù chī xiǎo cān, hǎo bù hǎo?",wrong:"小餐",right:"大餐",py:"dàcān",fullpy:"Nǐ qǐng wǒ qù chī dàcān, hǎo bù hǎo?",exp:"A fancy meal is 大餐 (dàcān — big/fancy meal). 小餐 is not a standard term.",lesson:"L8"},
+  {s:"我打算買她一雙運動鞋送給她。",spy:"Wǒ dǎsuàn mǎi tā yī shuāng yùndòng xié sòng gěi tā.",wrong:"買",right:"送",py:"sòng",fullpy:"Wǒ dǎsuàn sòng tā yī shuāng yùndòng xié.",exp:"The verb for giving a gift is 送 (sòng). The sentence should use 送她一雙運動鞋.",lesson:"L8"},
+  // L9
+  {s:"今天星期七，我們去打網球。",spy:"Jīntiān xīngqī qī, wǒmen qù dǎ wǎngqiú.",wrong:"星期七",right:"星期天",py:"xīngqítiān",fullpy:"Jīntiān xīngqítiān, wǒmen qù dǎ wǎngqiú.",exp:"Sunday is 星期天 (xīngqítiān) in Mandarin, not 星期七. The week ends at 星期六 (Saturday).",lesson:"L9"},
+  {s:"我星期五不行，星期六怎麼樣？不行，星期六也行。",spy:"Wǒ xīngqíwǔ bù xíng, xīngqíliù zěnmeyàng? Bù xíng, xīngqíliù yě xíng.",wrong:"也行",right:"也不行",py:"yě bù xíng",fullpy:"Wǒ xīngqíwǔ bù xíng, xīngqíliù zěnmeyàng? Bù xíng, xīngqíliù yě bù xíng.",exp:"In the dialogue 不行 means it does not work. Saying 也行 would mean it also works, which contradicts the context.",lesson:"L9"},
+  {s:"我們晚上六分半在餐廳見，怎麼樣？",spy:"Wǒmen wǎnshàng liù fēn bàn zài cāntīng jiàn, zěnmeyàng?",wrong:"六分半",right:"六點半",py:"liù diǎn bàn",fullpy:"Wǒmen wǎnshàng liù diǎn bàn zài cāntīng jiàn, zěnmeyàng?",exp:"Half past six is 六點半 (liù diǎn bàn). 分 means minutes, 點 means o'clock.",lesson:"L9"},
+  {s:"那家公司的牛肉麵最好吃。",spy:"Nà jiā gōngsī de niúròumiàn zuì hǎochī.",wrong:"公司",right:"餐廳",py:"cāntīng",fullpy:"Nà jiā cāntīng de niúròumiàn zuì hǎochī.",exp:"You eat beef noodle soup at a 餐廳 (restaurant), not a 公司 (company/office).",lesson:"L9"},
+  {s:"你要不要和我們一起去吃飯？",spy:"Nǐ yào bú yào hàn wǒmen yīqǐ qù chī fàn?",wrong:"和",right:"跟",py:"gēn",fullpy:"Nǐ yào bú yào gēn wǒmen yīqǐ qù chī fàn?",exp:"When used as a preposition meaning with in this sentence pattern, 跟 (gēn) is correct. 和 is used as a conjunction to connect nouns.",lesson:"L9"},
+  {s:"現在幾點？現在十點二十號。",spy:"Xiànzài jǐ diǎn? Xiànzài shí diǎn èrshí hào.",wrong:"二十號",right:"二十分",py:"èrshí fēn",fullpy:"Xiànzài jǐ diǎn? Xiànzài shí diǎn èrshí fēn.",exp:"Minutes are expressed with 分 (fēn), not 號 (which is for days of the month).",lesson:"L9"},,
+  // L10
+  {s:"我覺得說話不難，可是寫字有一點好吃。",wrong:"好吃",right:"難",py:"nán",fullpy:"Wǒ juéde shuō huà bù nán, kěshì xiě zì yǒu yīdiǎn nán.",exp:"有一點 must be used with negative-meaning state verbs. 好吃 is positive and cannot follow 有一點.",lesson:"L10"},
+  {s:"他說中文，說很好。",wrong:"說很好",right:"說得很好",py:"shuō de hěn hǎo",fullpy:"他說中文，說得很好。Tā shuō Zhōngwén, shuō de hěn hǎo.",exp:"The complement marker 得 (de) is required between the verb and its descriptive complement.",lesson:"L10"},
+  {s:"我不學說中文。",wrong:"不學",right:"不會",py:"bù huì",fullpy:"我不會說中文。Wǒ bù huì shuō Zhōngwén.",exp:"To express inability use 不會 (cannot/don't know how to). 不學 means to not study.",lesson:"L10"},
+  {s:"你會寫幾少字？",wrong:"幾少",right:"多少",py:"duōshǎo",fullpy:"你會寫多少字？Nǐ huì xiě duōshǎo zì?",exp:"幾少 is not a word. Use 多少 (how many/much). 幾 requires a measure word after it.",lesson:"L10"},
+  {s:"我常常跟明文練習說話，聊得天。",wrong:"聊得天",right:"聊天",py:"liáo tiān",fullpy:"我常常跟明文聊天，練習說話。Wǒ chángcháng gēn Míngwén liáo tiān, liànxí shuō huà.",exp:"聊天 (to chat) is a set phrase. 得 should not be inserted into it.",lesson:"L10"},
+  {s:"這雙運動鞋有一點好吃。",wrong:"好吃",right:"貴",py:"guì",fullpy:"這雙運動鞋有一點貴。Zhè shuāng yùndòng xié yǒu yīdiǎn guì.",exp:"好吃 means delicious and is for food only. For expensive shoes use 貴 (guì).",lesson:"L10"}
+];
+// ── STATE ─────────────────────────────────────────────────────────────────────
+var vocab=VOCAB.map(function(w,i){return Object.assign({},w,{id:i+1});});
+var grammar=GRAMMAR.map(function(g){return Object.assign({},g);});
+var fcFilter="ALL",wFilter="ALL",deck=[],dcur=0,dflipped=false,dresults=[],wrongCards=[];
+var qzMode="mc",qzFilter="ALL",qDeck=[],qCur=0,qOk=0,qNo=0,qAnswered=false,qHistory=[];
+var prFilter="ALL",prDeck=[],prCur=0,prOk=0,prNo=0,prAnswered=false,prHistory=[],prWrong=[];
+var drFilter="ALL",drDeck=[],drCur=0,drOk=0,drNo=0,drRevealed=false,drHistory=[];
+var drCanvas,drCtx,drDrawing=false,drLastX=0,drLastY=0;
+
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},2200);}
+
+function lessons(){
+  var seen={},out=["ALL"];
+  vocab.forEach(function(w){if(!seen[w.lesson]){seen[w.lesson]=true;out.push(w.lesson);}});
+  var order=["ALL","L4","L5","L6","L7","L8","L9","L10","L11","L12","Bonus"];
+  return out.sort(function(a,b){
+    var ai=order.indexOf(a),bi=order.indexOf(b);
+    if(ai===-1)ai=order.length;
+    if(bi===-1)bi=order.length;
+    return ai-bi;
+  });
+}
+
+function buildPills(id,current,setter){
+  document.getElementById(id).innerHTML=lessons().map(function(l){
+    return "<button class='pill"+(current===l?" on":"")+"' onclick=\""+setter+"('"+l+"')\">"+(l==="ALL"?"All":l)+"</button>";
+  }).join("");
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function go(tab){
+  var tabs=["cards","quiz","practice","draw","words","grammar","add"];
+  document.querySelectorAll(".tab").forEach(function(t,i){t.classList.toggle("on",tabs[i]===tab);});
+  document.querySelectorAll(".pane").forEach(function(p){p.classList.remove("on");});
+  document.getElementById("pane-"+tab).classList.add("on");
+  if(tab==="cards"){buildPills("fcf",fcFilter,"setFCF");startDeck();}
+  if(tab==="quiz"){buildPills("qzf",qzFilter,"setQZF");}
+  if(tab==="practice"){buildPills("prf",prFilter,"setPRF");}
+  if(tab==="draw"){buildPills("dr-filters",drFilter,"setDRF");}
+  if(tab==="words"){renderWords();}
+  if(tab==="grammar"){renderGrammar();}
+  if(tab==="add"){renderRecent();}
+}
+
+// ── FLASHCARDS ────────────────────────────────────────────────────────────────
+function setFCF(l){fcFilter=l;buildPills("fcf",fcFilter,"setFCF");startDeck();}
+function startDeck(){
+  var pool=(fcFilter==="ALL"?vocab.slice():vocab.filter(function(w){return w.lesson===fcFilter;})).sort(function(){return Math.random()-.5;});
+  deck=fcFilter==="ALL"?pool.slice(0,30):pool;
+  dcur=0;dresults=[];dflipped=false;wrongCards=[];
+  document.getElementById("fdone").style.display="none";
+  document.getElementById("fempty").style.display="none";
+  document.getElementById("fwrap").style.display="none";
+  document.getElementById("fbtns").style.display="none";
+  document.getElementById("pdots").innerHTML="";
+  document.getElementById("fcct").textContent=deck.length+" cards";
+  if(!deck.length){document.getElementById("fempty").style.display="block";return;}
+  document.getElementById("fwrap").style.display="block";
+  document.getElementById("fbtns").style.display="flex";
+  loadCard();
+}
+function loadCard(){
+  if(dcur>=deck.length){endDeck();return;}
+  var w=deck[dcur];
+  document.getElementById("fzh").textContent=w.zh;
+  document.getElementById("ftag").textContent=w.lesson;
+  document.getElementById("fpy").textContent=w.py;
+  document.getElementById("fen").textContent=w.en;
+  document.getElementById("ftype").textContent=w.type?"["+w.type+"]":"";
+  document.getElementById("fnote").textContent=w.note||"";
+  document.getElementById("fcard").classList.remove("flipped");dflipped=false;
+  buildDots();
+}
+function buildDots(){
+  document.getElementById("pdots").innerHTML=deck.map(function(_,i){var c="dot"+(i===dcur?" cur":i<dcur?(dresults[i]?" ok":" no"):"");return "<div class='"+c+"'></div>";}).join("");
+}
+function flip(){dflipped=!dflipped;document.getElementById("fcard").classList.toggle("flipped",dflipped);}
+function mark(ok){
+  dresults[dcur]=ok;
+  if(!ok)wrongCards.push(deck[dcur]);
+  dcur++;buildDots();
+  if(dcur>=deck.length&&wrongCards.length>0){
+    deck=wrongCards.slice();wrongCards=[];dcur=0;dresults=[];
+    setTimeout(function(){toast("Repeating "+deck.length+" missed card"+(deck.length>1?"s":"")+"!");loadCard();},300);
+  } else {
+    setTimeout(loadCard,150);
+  }
+}
+function endDeck(){
+  document.getElementById("fwrap").style.display="none";
+  document.getElementById("fbtns").style.display="none";
+  document.getElementById("fdone").style.display="block";
+  var ok=dresults.filter(Boolean).length;
+  document.getElementById("donesum").textContent=ok+" of "+deck.length+" correct this session";
+}
+
+// ── QUIZ ──────────────────────────────────────────────────────────────────────
+function setQZF(l){qzFilter=l;buildPills("qzf",qzFilter,"setQZF");}
+function setQZMode(m){
+  qzMode=m;
+  ["mc","rev","mix"].forEach(function(x){document.getElementById("qz-mode-"+x).classList.toggle("on",x===m);});
+}
+function startQuiz(){
+  var pool=qzFilter==="ALL"?vocab.slice():vocab.filter(function(w){return w.lesson===qzFilter;});
+  if(pool.length<4){toast("Need at least 4 words!");return;}
+  var shuffled=pool.slice().sort(function(){return Math.random()-.5;});
+  qDeck=qzFilter==="ALL"?shuffled.slice(0,25):shuffled;
+  qCur=0;qOk=0;qNo=0;qAnswered=false;qHistory=[];
+  document.getElementById("qzbtn").style.display="none";
+  document.getElementById("qz-restart").style.display="block";
+  document.getElementById("qz-back").style.display="none";
+  document.getElementById("qzok").textContent="0 \u2713";
+  document.getElementById("qzno").textContent="0 \u2717";
+  loadQuiz();
+}
+function loadQuiz(){
+  if(qCur>=qDeck.length){endQuiz();return;}
+  document.getElementById("qz-back").style.display=qCur>0?"block":"none";
+  var w=qDeck[qCur];
+  var rev=qzMode==="rev"||(qzMode==="mix"&&Math.random()<0.5);
+  document.getElementById("qzq").innerHTML=rev
+    ?"<span style='font-size:20px;font-weight:600;'>"+w.en+"</span>"
+    :"<span style='font-size:52px;font-family:var(--ffs);'>"+w.zh+"</span>";
+  document.getElementById("qzfb").style.display="none";
+  document.getElementById("qzprog").textContent=(qCur+1)+" / "+qDeck.length;
+  var others=qDeck.filter(function(_,i){return i!==qCur;}).sort(function(){return Math.random()-.5;}).slice(0,3);
+  var opts=[].concat(others,[w]).sort(function(){return Math.random()-.5;});
+  var correct=opts.findIndex(function(x){return x.id===w.id;});
+  document.getElementById("qzopts").innerHTML=opts.map(function(o,i){
+    return "<button class='qzopt' onclick='answerQuiz("+i+","+correct+")'>"+(rev?o.zh:o.en)+"</button>";
+  }).join("");
+  qAnswered=false;
+}
+function answerQuiz(chosen,correct){
+  if(qAnswered)return;qAnswered=true;
+  var btns=document.querySelectorAll(".qzopt");
+  btns.forEach(function(b){b.disabled=true;});
+  var fb=document.getElementById("qzfb");
+  var word=qDeck[qCur];
+  var pyline="<div style='font-size:12px;margin-top:5px;'>"+word.zh+' · '+word.py+"</div>";
+  if(chosen===correct){
+    btns[chosen].classList.add("correct");
+    fb.innerHTML='✓ Correct!'+pyline;fb.className="qzfb ok";qOk++;
+  }else{
+    btns[chosen].classList.add("wrong");btns[correct].classList.add("correct");
+    fb.innerHTML='✗ Answer: '+word.en+pyline;fb.className="qzfb bad";qNo++;
+  }
+  fb.style.display="block";
+  var qzbox=document.getElementById("qzq");
+  if(qzbox){qzbox.style.borderBottomLeftRadius="0";qzbox.style.borderBottomRightRadius="0";qzbox.style.boxShadow="none";qzbox.style.marginBottom="0";}
+  document.getElementById("qzok").textContent=qOk+" ✓";
+  document.getElementById("qzno").textContent=qNo+" ✗";
+  qHistory.push(qCur);
+  if(chosen!==correct){qDeck.push(qDeck[qCur]);}
+  document.getElementById("qznext").style.display="block";
+}
+
+function endQuiz(){
+  document.getElementById("qzq").innerHTML="\uD83C\uDF89 Done! <span class='qzsub'>"+qOk+" / "+qDeck.length+" correct</span>";
+  document.getElementById("qzopts").innerHTML="";
+  document.getElementById("qzfb").style.display="none";
+  document.getElementById("qzbtn").textContent="Play again \u25B6";
+  document.getElementById("qzbtn").style.display="block";
+}
+function nextQuiz(){
+  document.getElementById("qznext").style.display="none";
+  document.getElementById("qzfb").style.display="none";
+  qCur++;loadQuiz();
+}
+function goBackQuiz(){
+  if(qHistory.length===0)return;
+  qCur=qHistory.pop();
+  qAnswered=false;
+  document.getElementById("qzfb").style.display="none";
+  loadQuiz();
+}
+function restartQuiz(){
+  qCur=0;qOk=0;qNo=0;qAnswered=false;
+  document.getElementById("qzok").textContent="0 \u2713";document.getElementById("qzno").textContent="0 \u2717";
+  document.getElementById("qzprog").textContent="";document.getElementById("qzfb").style.display="none";
+  document.getElementById("qzopts").innerHTML="";document.getElementById("qzq").textContent="Press start to begin!";
+  document.getElementById("qzbtn").textContent="Start Quiz \u25B6";document.getElementById("qzbtn").style.display="block";
+  document.getElementById("qz-restart").style.display="none";
+  document.getElementById("qz-back").style.display="none";
+  document.getElementById("qznext").style.display="none";
+  qHistory=[];
+}
+
+// ── PRACTICE ──────────────────────────────────────────────────────────────────
+function setPRF(l){prFilter=l;buildPills("prf",prFilter,"setPRF");}
+function startPractice(){
+  var pool=prFilter==="ALL"?vocab.slice():vocab.filter(function(w){return w.lesson===prFilter;});
+  if(pool.length<4){toast("Need at least 4 words!");return;}
+  var questions=[];
+  pool.slice().sort(function(){return Math.random()-.5;}).slice(0,6).forEach(function(w){
+    var others=pool.filter(function(x){return x.id!==w.id;}).sort(function(){return Math.random()-.5;}).slice(0,3);
+    var opts=[].concat(others,[w]).sort(function(){return Math.random()-.5;});
+    questions.push({type:"mc",label:"Character to Meaning",zh:w.zh,py:w.py,opts:opts.map(function(o){return o.en;}),ans:opts.findIndex(function(o){return o.id===w.id;}),exp:""});
+  });
+  pool.slice().sort(function(){return Math.random()-.5;}).slice(0,6).forEach(function(w){
+    var others=pool.filter(function(x){return x.id!==w.id;}).sort(function(){return Math.random()-.5;}).slice(0,3);
+    var opts=[].concat(others,[w]).sort(function(){return Math.random()-.5;});
+    questions.push({type:"rev",label:"English to Chinese",zh:w.en,py:w.py,opts:opts.map(function(o){return o.zh;}),ans:opts.findIndex(function(o){return o.id===w.id;}),exp:"",zh2:w.zh});
+  });
+  var fp=prFilter==="ALL"?FITB:FITB.filter(function(f){return f.lesson===prFilter;});
+  fp.sort(function(){return Math.random()-.5;}).slice(0,5).forEach(function(f){
+    questions.push({type:"fitb",label:"Fill in the Blank",zh:f.s,py:f.py||"",full:f.full||"",opts:f.opts.slice(),ans:f.opts.indexOf(f.ans),exp:""});
+  });
+  var rp=prFilter==="ALL"?DIALOGUES:DIALOGUES.filter(function(d){return d.lesson===prFilter;});
+  rp.sort(function(){return Math.random()-.5;}).slice(0,4).forEach(function(d){
+    questions.push({type:"reply",label:"Best Reply",zh:d.q,py:d.py||"",qpy:d.qpy||"",opts:d.opts.slice(),ans:d.ans,exp:""});
+  });
+  var ep=prFilter==="ALL"?ERRORS:ERRORS.filter(function(e){return e.lesson===prFilter;});
+  ep.sort(function(){return Math.random()-.5;}).slice(0,4).forEach(function(e){
+    var dist=pool.filter(function(w){return w.zh!==e.wrong;}).sort(function(){return Math.random()-.5;}).slice(0,3).map(function(w){return w.zh;});
+    var opts=[e.wrong].concat(dist).sort(function(){return Math.random()-.5;});
+    questions.push({type:"error",label:"Find the Error",zh:e.s,py:e.py||"",fullpy:e.fullpy||"",spy:e.spy||"",opts:opts,ans:opts.indexOf(e.wrong),exp:"Correct: "+e.right+". "+e.exp});
+  });
+  prDeck=questions.sort(function(){return Math.random()-.5;});
+  prCur=0;prOk=0;prNo=0;prAnswered=false;
+  prHistory=[];prWrong=[];
+  document.getElementById("prbtn").style.display="none";
+  document.getElementById("pr-restart").style.display="block";
+  document.getElementById("pr-back").style.display="none";
+  document.getElementById("prnext").style.display="none";
+  document.getElementById("prqbox").innerHTML="";
+  document.getElementById("prok").textContent="0 \u2713";document.getElementById("prno").textContent="0 \u2717";
+  document.getElementById("prfb").style.display="none";
+  loadPractice();
+}
+function loadPractice(){
+  if(prCur>=prDeck.length){
+    if(prWrong.length>0){
+      prDeck=prWrong.slice();prWrong=[];prCur=0;
+      toast("Repeating "+prDeck.length+" missed question"+(prDeck.length>1?"s":"")+"!");
+    } else {endPractice();return;}
+  }
+  document.getElementById("pr-back").style.display=prHistory.length>0?"block":"none";
+  var q=prDeck[prCur];prAnswered=false;
+  document.getElementById("prprog").textContent=(prCur+1)+" / "+prDeck.length;
+  document.getElementById("prbadge").textContent=q.label;
+  var big=q.type==="mc";
+  document.getElementById("prqbox").innerHTML="<div class=\'qzq\' style=\'font-size:"+(big?"52":"18")+"px;min-height:110px;line-height:1.5;flex-direction:column;gap:4px;\'><span>"+q.zh+"</span>"+(q.type==="error"?"<span style='font-size:13px;color:var(--ink3);margin-top:6px;'>Which word or phrase is wrong?</span>":"")+"</div><div class=\'qzfb\' id=\'prfb\' style=\'display:none;border-radius:0 0 var(--rl) var(--rl);margin-bottom:.75rem;\'></div>"
+  var lng=q.opts.some(function(o){return o.length>14;});
+  document.getElementById("probox").innerHTML="<div class='qzopts' style='grid-template-columns:"+(lng?"1fr":"1fr 1fr")+";'>"+
+    q.opts.map(function(o,i){return "<button class='qzopt' onclick='answerPractice("+i+")'>"+o+"</button>";}).join("")+"</div>";
+}
+function answerPractice(chosen){
+  if(prAnswered)return;prAnswered=true;
+  var q=prDeck[prCur];
+  var btns=document.querySelectorAll("#probox .qzopt");
+  btns.forEach(function(b){b.disabled=true;});
+  var fb=document.getElementById("prfb");
+  var pyline="";
+  if(q.type==="mc"&&q.py){
+    pyline="<div style='font-size:12px;margin-top:5px;'>"+q.zh+' · '+q.py+"</div>";
+  } else if(q.type==="rev"&&q.zh2){
+    pyline="<div style='font-size:12px;margin-top:5px;'>"+q.zh2+' · '+q.py+"</div>";
+  } else if(q.type==="fitb"&&q.full&&q.py){
+    pyline="<div style='font-size:12px;color:var(--green-d);margin-top:5px;'>"+q.full+"</div><div style='font-size:12px;color:var(--ink2);margin-top:2px;'>"+q.py+"</div>";
+  } else if(q.type==="error"&&q.py){
+    pyline="<div style='font-size:12px;color:var(--green-d);margin-top:5px;'>"+q.opts[q.ans]+" · "+q.py+"</div>"+(q.fullpy?"<div style='font-size:12px;color:var(--ink2);margin-top:2px;'>"+q.fullpy+"</div>":"");
+  } else if(q.type==="reply"&&q.py){
+    pyline="<div style='font-size:12px;color:var(--green-d);margin-top:5px;'>"+q.opts[q.ans]+"</div><div style='font-size:12px;color:var(--ink2);margin-top:2px;'>"+q.py+"</div>"+(q.qpy?"<div style='font-size:12px;color:var(--ink3);margin-top:4px;font-style:italic;'>Q: "+q.qpy+"</div>":"");
+  } else if(q.py){
+    pyline="<div style='font-size:12px;color:var(--green-d);margin-top:5px;'>"+q.opts[q.ans]+' · '+q.py+"</div>";
+  } else {
+    var correctText=q.opts[q.ans];
+    var match=vocab.filter(function(w){return w.zh===correctText||w.en===correctText;});
+    if(match.length>0)pyline="<div style='font-size:12px;color:var(--green-d);margin-top:5px;'>"+match[0].zh+' · '+match[0].py+"</div>";
+  }
+  if(chosen===q.ans){
+    btns[chosen].classList.add("correct");
+    fb.innerHTML='✓ Correct!'+pyline;fb.className="qzfb ok";prOk++;
+  }else{
+    btns[chosen].classList.add("wrong");btns[q.ans].classList.add("correct");
+    fb.innerHTML='✗ Correct answer: '+q.opts[q.ans]+(q.exp?' — '+q.exp:'')+pyline;fb.className="qzfb bad";prNo++;
+  }
+  fb.style.display="block";
+  var qbox=document.querySelector("#prqbox .qzq");
+  if(qbox){qbox.style.borderBottomLeftRadius="0";qbox.style.borderBottomRightRadius="0";qbox.style.boxShadow="none";qbox.style.marginBottom="0";}
+  document.getElementById("prok").textContent=prOk+" ✓";document.getElementById("prno").textContent=prNo+" ✗";
+  prHistory.push(prCur);
+  if(chosen!==q.ans)prWrong.push(q);
+  document.getElementById("prnext").style.display="block";
+}
+
+function endPractice(){
+  document.getElementById("prqbox").innerHTML="<div class='donebox'><div class='big'>\uD83C\uDF89</div><h2>Practice complete!</h2><p>"+prOk+" of "+prDeck.length+" correct</p></div>";
+  document.getElementById("probox").innerHTML="";document.getElementById("prfb").style.display="none";
+  document.getElementById("prbtn").textContent="Practice again \u25B6";document.getElementById("prbtn").style.display="block";
+}
+function nextPractice(){
+  document.getElementById("prnext").style.display="none";
+  prCur++;loadPractice();
+}
+function goBackPractice(){
+  if(prHistory.length===0)return;
+  prCur=prHistory.pop();
+  prAnswered=false;
+  loadPractice();
+}
+function restartPractice(){
+  prCur=0;prOk=0;prNo=0;prAnswered=false;
+  document.getElementById("prok").textContent="0 \u2713";document.getElementById("prno").textContent="0 \u2717";
+  document.getElementById("prprog").textContent="";document.getElementById("prfb").style.display="none";
+  document.getElementById("probox").innerHTML="";document.getElementById("prqbox").innerHTML="";
+  document.getElementById("prbadge").textContent="";
+  document.getElementById("prbtn").textContent="Start Practice \u25B6";document.getElementById("prbtn").style.display="block";
+  document.getElementById("pr-restart").style.display="none";
+  document.getElementById("pr-back").style.display="none";
+  document.getElementById("prnext").style.display="none";
+  prHistory=[];prWrong=[];
+}
+
+// ── DRAW ──────────────────────────────────────────────────────────────────────
+function setDRF(l){drFilter=l;buildPills("dr-filters",drFilter,"setDRF");}
+function startDraw(){
+  var pool=drFilter==="ALL"?vocab.slice():vocab.filter(function(w){return w.lesson===drFilter;});
+  var drShuffled=pool.slice().sort(function(){return Math.random()-.5;});
+  drDeck=drFilter==="ALL"?drShuffled.slice(0,25):drShuffled;
+  drCur=0;drOk=0;drNo=0;drRevealed=false;drHistory=[];
+  document.getElementById("dr-done").style.display="none";
+  document.getElementById("dr-start-wrap").style.display="none";
+  document.getElementById("dr-card").style.display="block";
+  document.getElementById("dr-restart").style.display="block";
+  document.getElementById("dr-back").style.display="none";
+  document.getElementById("drok").textContent="0 \u2713";
+  document.getElementById("drno").textContent="0 \u2717";
+  initCanvas();loadDrawCard();
+}
+function initCanvas(){
+  drCanvas=document.getElementById("dr-canvas");
+  var dpr=window.devicePixelRatio||1;
+  drCanvas.width=drCanvas.offsetWidth*dpr;
+  drCanvas.height=drCanvas.offsetHeight*dpr;
+  drCtx=drCanvas.getContext("2d");
+  drCtx.scale(dpr,dpr);
+  drCtx.strokeStyle="#1a1a18";drCtx.lineWidth=3;drCtx.lineCap="round";drCtx.lineJoin="round";
+  drCanvas.addEventListener("touchstart",drTS,{passive:false});
+  drCanvas.addEventListener("touchmove",drTM,{passive:false});
+  drCanvas.addEventListener("touchend",function(e){e.preventDefault();drDrawing=false;},{passive:false});
+  drCanvas.addEventListener("mousedown",function(e){var p=getPos(e);drDrawing=true;drLastX=p.x;drLastY=p.y;});
+  drCanvas.addEventListener("mousemove",function(e){if(!drDrawing)return;var p=getPos(e);drCtx.beginPath();drCtx.moveTo(drLastX,drLastY);drCtx.lineTo(p.x,p.y);drCtx.stroke();drLastX=p.x;drLastY=p.y;});
+  drCanvas.addEventListener("mouseup",function(){drDrawing=false;});
+  drCanvas.addEventListener("mouseleave",function(){drDrawing=false;});
+}
+function getPos(e){
+  var rect=drCanvas.getBoundingClientRect();
+  if(e.touches)return{x:e.touches[0].clientX-rect.left,y:e.touches[0].clientY-rect.top};
+  return{x:e.clientX-rect.left,y:e.clientY-rect.top};
+}
+function drTS(e){e.preventDefault();var p=getPos(e);drDrawing=true;drLastX=p.x;drLastY=p.y;drCtx.beginPath();drCtx.arc(p.x,p.y,1.5,0,Math.PI*2);drCtx.fill();}
+function drTM(e){e.preventDefault();if(!drDrawing)return;var p=getPos(e);drCtx.beginPath();drCtx.moveTo(drLastX,drLastY);drCtx.lineTo(p.x,p.y);drCtx.stroke();drLastX=p.x;drLastY=p.y;}
+function clearCanvas(){if(drCtx)drCtx.clearRect(0,0,drCanvas.width,drCanvas.height);}
+function loadDrawCard(){
+  if(drCur>=drDeck.length){endDraw();return;}
+  document.getElementById("dr-back").style.display=drHistory.length>0?"block":"none";
+  var w=drDeck[drCur];drRevealed=false;clearCanvas();
+  document.getElementById("dr-reveal").style.display="none";
+  document.getElementById("drprog").textContent=(drCur+1)+" / "+drDeck.length;
+  document.getElementById("dr-lesson-tag").textContent=w.lesson;
+  document.getElementById("dr-py").textContent=w.py;
+  document.getElementById("dr-en").textContent=w.en;
+  document.getElementById("dr-reveal-char").textContent=w.zh;
+  document.getElementById("dr-reveal-py").textContent=w.py;
+  document.getElementById("dr-reveal-en").textContent=w.en;
+}
+function revealChar(){
+  if(drRevealed)return;drRevealed=true;
+  document.getElementById("dr-reveal").style.display="block";
+  document.getElementById("dr-reveal").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function drMark(ok){
+  if(ok)drOk++;else{drNo++;drDeck.push(drDeck[drCur]);}
+  document.getElementById("drok").textContent=drOk+" \u2713";
+  document.getElementById("drno").textContent=drNo+" \u2717";
+  drHistory.push(drCur);
+  drCur++;document.getElementById("dr-reveal").style.display="none";clearCanvas();setTimeout(loadDrawCard,150);
+}
+function endDraw(){
+  document.getElementById("dr-card").style.display="none";
+  document.getElementById("dr-done").style.display="block";
+  document.getElementById("dr-done-sum").textContent=drOk+" of "+drDeck.length+" correct";
+  document.getElementById("dr-start-wrap").style.display="block";
+  document.getElementById("dr-restart").style.display="none";
+}
+function goBackDraw(){
+  if(drHistory.length===0)return;
+  drCur=drHistory.pop();
+  drRevealed=false;
+  document.getElementById("dr-reveal").style.display="none";
+  clearCanvas();
+  loadDrawCard();
+}
+function restartDraw(){
+  drCur=0;drOk=0;drNo=0;drRevealed=false;
+  document.getElementById("drok").textContent="0 \u2713";document.getElementById("drno").textContent="0 \u2717";
+  document.getElementById("drprog").textContent="";
+  document.getElementById("dr-done").style.display="none";document.getElementById("dr-card").style.display="none";
+  document.getElementById("dr-start-wrap").style.display="block";document.getElementById("dr-restart").style.display="none";
+  document.getElementById("dr-back").style.display="none";drHistory=[];
+}
+
+// ── MY WORDS ──────────────────────────────────────────────────────────────────
+function setWF(l){wFilter=l;buildPills("wf",wFilter,"setWF");filterWords();}
+function renderWords(){
+  document.getElementById("sttotal").textContent=vocab.length;
+  document.getElementById("stlessons").textContent=new Set(vocab.map(function(w){return w.lesson;})).size;
+  buildPills("wf",wFilter,"setWF");
+  filterWords();
+}
+function filterWords(){
+  var q=(document.getElementById("wsearch")||{value:""}).value.toLowerCase().trim();
+  var base=wFilter==="ALL"?vocab:vocab.filter(function(w){return w.lesson===wFilter;});
+  var filtered=q?base.filter(function(w){
+    return w.zh.includes(q)||w.py.toLowerCase().includes(q)||w.en.toLowerCase().includes(q)||w.lesson.toLowerCase().includes(q);
+  }):base;
+  if(q&&filtered.length===0){
+    document.getElementById("wlist").innerHTML="<div class=\'empty\'>No matches found.</div>";
+  } else if(q){
+    document.getElementById("wlist").innerHTML=filtered.map(function(w){
+      return "<div class=\'wrow\'><span class=\'wzh\'>"+w.zh+"</span><div class=\'winf\'><div class=\'wpy\'>"+w.py+"</div><div class=\'wen\'>"+w.en+"</div><div class=\'wtype\'>"+w.lesson+(w.type?" \u00B7 "+w.type:"")+"</div></div><button class=\'btn sm danger\' onclick=\'delWord("+w.id+")\'>&times;</button></div>";
+    }).join("");
+  } else {
+    var grouped={};filtered.forEach(function(w){if(!grouped[w.lesson])grouped[w.lesson]=[];grouped[w.lesson].push(w);});
+    document.getElementById("wlist").innerHTML=Object.keys(grouped).sort(function(a,b){
+      var order=["L4","L5","L6","L7","L8","L9","L10","L11","L12","Bonus"];
+      var ai=order.indexOf(a),bi=order.indexOf(b);
+      if(ai===-1)ai=order.length;if(bi===-1)bi=order.length;
+      return ai-bi;
+    }).map(function(l){
+      return "<div class=\'lg\'><div class=\'lbl\' style=\'margin-bottom:6px;\'>"+l+" \u00B7 "+grouped[l].length+" words</div>"+
+        grouped[l].map(function(w){return "<div class=\'wrow\'><span class=\'wzh\'>"+w.zh+"</span><div class=\'winf\'><div class=\'wpy\'>"+w.py+"</div><div class=\'wen\'>"+w.en+"</div>"+(w.type?"<div class=\'wtype\'>"+w.type+"</div>":"")+"</div><button class=\'btn sm danger\' onclick=\'delWord("+w.id+")\'>&times;</button></div>";}).join("")+"</div>";
+    }).join("");
+  }
+}
+
+function delWord(id){if(!confirm("Remove this word?"))return;vocab=vocab.filter(function(w){return w.id!==id;});renderWords();}
+
+// ── GRAMMAR ───────────────────────────────────────────────────────────────────
+function renderGrammar(){
+  document.getElementById("glist").innerHTML=grammar.map(function(g){
+    return "<div class='gc'><h3>"+g.title+"<button class='btn sm danger' onclick='delGrammar("+g.id+")'>✕</button></h3><p>"+g.body+"</p>"+(g.example?"<div class='ex'>"+g.example+"</div>":"")+"</div>";
+  }).join("");
+}
+function addGrammar(){
+  var title=document.getElementById("gttl").value.trim(),body=document.getElementById("gbody").value.trim(),example=document.getElementById("gex").value.trim();
+  if(!title||!body){toast("Need a title and explanation");return;}
+  grammar.push({id:Date.now(),title:title,body:body,example:example});
+  renderGrammar();["gttl","gbody","gex"].forEach(function(id){document.getElementById(id).value="";});toast("Grammar note saved!");
+}
+function delGrammar(id){grammar=grammar.filter(function(g){return g.id!==id;});renderGrammar();}
+
+// ── ADD VOCAB ─────────────────────────────────────────────────────────────────
+function addWord(){
+  var zh=document.getElementById("inzh").value.trim(),py=document.getElementById("inpy").value.trim();
+  var en=document.getElementById("inen").value.trim(),note=document.getElementById("innote").value.trim();
+  var lesson=document.getElementById("sellesson").value,type=document.getElementById("seltype").value;
+  if(!zh||!en){toast("Character and meaning required");return;}
+  vocab.push({zh:zh,py:py,en:en,note:note,lesson:lesson,type:type,id:Date.now()});
+  ["inzh","inpy","inen","innote"].forEach(function(id){document.getElementById(id).value="";});
+  toast("Added: "+zh+" \u2014 "+en);renderRecent();
+}
+function toggleBulk(){var c=document.getElementById("bulkcard");c.style.display=c.style.display==="none"?"block":"none";}
+function parseBulk(){
+  var raw=document.getElementById("bulkin").value.trim(),lesson=document.getElementById("sellesson").value,added=0;
+  raw.split("\n").filter(function(l){return l.trim();}).forEach(function(l){
+    var p=l.split("|").map(function(s){return s.trim();});
+    if(p.length>=3){vocab.push({zh:p[0],py:p[1],en:p[2],type:p[3]||"",note:"",lesson:lesson,id:Date.now()+Math.random()});added++;}
+  });
+  document.getElementById("bulkin").value="";toggleBulk();toast("Imported "+added+" words!");renderRecent();
+}
+function renderRecent(){
+  var recent=vocab.slice(-6).reverse();
+  document.getElementById("recentadds").innerHTML=recent.length?"<div class='lbl' style='margin-top:.5rem;'>Recently added</div>"+
+    recent.map(function(w){return "<div class='wrow'><span class='wzh'>"+w.zh+"</span><div class='winf'><div class='wpy'>"+w.py+"</div><div class='wen'>"+w.en+"</div></div><span style='font-size:11px;color:var(--ink3);'>"+w.lesson+"</span></div>";}).join(""):"";
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildPills("fcf",fcFilter,"setFCF");startDeck();
+</script>
+</body>
+</html>
